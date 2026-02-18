@@ -435,7 +435,11 @@ button { border:none; background:none; cursor:pointer; font:inherit; }
 }
 .cert-img {
   width:100%; display:block;
+  border-bottom:1px solid var(--border-light);
 }
+.cert-card-body { padding:16px; }
+.cert-card-body h4 { font-size:15px; font-weight:700; margin-bottom:4px; }
+.cert-card-body p { font-size:13px; color:var(--text-tertiary); line-height:1.6; }
 
 /* ===== PARTNERS STATS ===== */
 .partner-stats {
@@ -815,12 +819,48 @@ button { border:none; background:none; cursor:pointer; font:inherit; }
       <p>벤처기업 인증, 특허, 기술 임치 등 공신력 있는 자격과 독자적인 기술을 보유하고 있습니다.</p>
     </div>
     <div class="cert-grid">
-      <div class="cert-card reveal"><img src="회사소개/벤처기업인증,특허.jpg" alt="벤처기업 인증 및 상표등록증" class="cert-img"></div>
-      <div class="cert-card reveal"><img src="회사소개/의료기기판매업.JPG" alt="의료기기판매업 신고증" class="cert-img"></div>
-      <div class="cert-card reveal"><img src="회사소개/통신판매업.JPG" alt="통신판매업 신고증" class="cert-img"></div>
-      <div class="cert-card reveal"><img src="회사소개/임치증.JPG" alt="스마트 계약 플랫폼 기술 임치증" class="cert-img"></div>
-      <div class="cert-card reveal"><img src="회사소개/임치증2.JPG" alt="AI 배송 시스템 기술 임치증" class="cert-img"></div>
-      <div class="cert-card reveal"><img src="회사소개/연구개발전담부서인정서.JPG" alt="연구개발전담부서 인정서" class="cert-img"></div>
+      <div class="cert-card reveal">
+        <img src="회사소개/벤처기업인증,특허.jpg" alt="벤처기업 인증 및 상표등록증" class="cert-img">
+        <div class="cert-card-body">
+          <h4>벤처기업 인증 / 상표등록</h4>
+          <p>중소벤처기업부 벤처확인기업 인증<br>DENDEAL 상표등록 (특허청)</p>
+        </div>
+      </div>
+      <div class="cert-card reveal">
+        <img src="회사소개/의료기기판매업.JPG" alt="의료기기판매업 신고증" class="cert-img">
+        <div class="cert-card-body">
+          <h4>의료기기판매업 신고증</h4>
+          <p>의료기기법에 따른 판매(임대)업 신고<br>경기도 안양시 | 2025년</p>
+        </div>
+      </div>
+      <div class="cert-card reveal">
+        <img src="회사소개/통신판매업.JPG" alt="통신판매업 신고증" class="cert-img">
+        <div class="cert-card-body">
+          <h4>통신판매업 신고증</h4>
+          <p>전자상거래 소비자보호법에 따른 신고<br>안양시 동안구 | 2025년</p>
+        </div>
+      </div>
+      <div class="cert-card reveal">
+        <img src="회사소개/임치증.JPG" alt="스마트 계약 플랫폼 기술 임치증" class="cert-img">
+        <div class="cert-card-body">
+          <h4>스마트 계약 플랫폼 기술</h4>
+          <p>의료용품 중개를 통한 스마트 계약 플랫폼 기술<br>(기술보증기금 임치)</p>
+        </div>
+      </div>
+      <div class="cert-card reveal">
+        <img src="회사소개/임치증2.JPG" alt="AI 배송 시스템 기술 임치증" class="cert-img">
+        <div class="cert-card-body">
+          <h4>AI 배송 시스템 기술</h4>
+          <p>빅데이터 AI를 활용한 효율적 배송 시스템 기술<br>(기술보증기금 임치)</p>
+        </div>
+      </div>
+      <div class="cert-card reveal">
+        <img src="회사소개/연구개발전담부서인정서.JPG" alt="연구개발전담부서 인정서" class="cert-img">
+        <div class="cert-card-body">
+          <h4>연구개발전담부서</h4>
+          <p>과학기술정보통신부 인정<br>한국산업기술진흥협회(KOITA) 발급</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
