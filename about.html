@@ -261,6 +261,16 @@ button { border:none; background:none; cursor:pointer; font:inherit; }
   padding:12px 14px; font-size:13px; font-weight:600;
   color:var(--text-secondary); line-height:1.4;
 }
+.news-card-cta {
+  border-radius:var(--radius-md); overflow:hidden;
+  border:2px dashed var(--primary); background:var(--primary-50);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:14px; padding:24px; text-align:center; transition:var(--transition); cursor:pointer;
+}
+.news-card-cta:hover { background:var(--primary-100); transform:translateY(-4px); box-shadow:var(--shadow-lg); }
+.news-card-cta .cta-icon { width:56px; height:56px; border-radius:50%; background:var(--primary); display:flex; align-items:center; justify-content:center; font-size:28px; color:#fff; }
+.news-card-cta .cta-title { font-size:15px; font-weight:700; color:var(--primary-dark); }
+.news-card-cta .cta-desc { font-size:13px; color:var(--text-secondary); line-height:1.5; }
 
 /* ===== PRESS / MEDIA ===== */
 .press-grid {
@@ -1071,6 +1081,11 @@ button { border:none; background:none; cursor:pointer; font:inherit; }
         <img src="회사소개/에이엔디기공소/에이엔디기공소 감사장.jpg" alt="에이엔디기공소 파트너십">
         <div class="news-card-label">에이엔디기공소</div>
       </div>
+      <a href="http://pf.kakao.com/_MYKhX/chat" target="_blank" class="news-card-cta reveal">
+        <div class="cta-icon">+</div>
+        <div class="cta-title">파트너가 되어주세요</div>
+        <div class="cta-desc">덴딜과 함께 성장할<br>파트너를 기다립니다</div>
+      </a>
     </div>
   </div>
 </section>
