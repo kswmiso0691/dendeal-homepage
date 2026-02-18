@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<!-- saved from url=(0029)https://dendeal.kr/stock/main -->
+<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>쇼핑몰</title>
+
+<link rel="icon" href="https://dendeal.kr/favicon.ico" type="image/x-icon" sizes="16x16">
+<link rel="apple-touch-icon" sizes="57x57" href="https://dendeal.kr/images/apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="https://dendeal.kr/images/apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="https://dendeal.kr/images/apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="https://dendeal.kr/images/apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="https://dendeal.kr/images/apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="https://dendeal.kr/images/apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="https://dendeal.kr/images/apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="https://dendeal.kr/images/apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://dendeal.kr/images/apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="https://dendeal.kr/images/android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://dendeal.kr/images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="https://dendeal.kr/images/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://dendeal.kr/images/favicon-16x16.png">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" href="./쇼핑몰_files/styles.css">
+<link rel="stylesheet" href="./쇼핑몰_files/mycommon.css">
+<link href="./쇼핑몰_files/jquery-ui.min.css" rel="stylesheet" type="text/css">
+<script src="./쇼핑몰_files/jquery-1.12.1.min.js.다운로드" type="text/javascript"></script>
+<script src="./쇼핑몰_files/jquery.cookie.js.다운로드" type="text/javascript"></script>
+<script type="text/javascript" src="./쇼핑몰_files/jquery-ui.min.js.다운로드"></script>
+<script type="text/javascript">
+$(function()
+{
+	$(document).on('keydown keyup', 'input[name="buy_count"]', function()
+	{
+		var replace_text = $(this).val().replace(/[^0-9,]/g, '');
+		$(this).val(replace_text);
+		if (replace_text.length == 0) $(this).val(1);
+	});
+	
+	$(document).on('click', '.btn-add-delete', function()
+	{
+		var html = '<tr><td colspan="2" style="height:100px;"></td></tr>';
+		
+		$('#modal').addClass('active');
+		$('.bottom-nav').addClass('hidden');
+		
+		$('#f_shopsearch #ss').val('');
+		$('#f_shopsearch #cate').val('');
+		$('#shop-product-list').html(html);
+		
+		$('.category-filter').removeClass('active');
+		$('.category-filter').eq(0).addClass('active');
+		
+		fn_history_search('', '', 1);
+	});
+	
+	$(document).on('click', '#btn-modal-close', function()
+	{
+		$('#modal').removeClass('active');
+		$('.bottom-nav').removeClass('hidden');
+		
+		self.location = self.location;
+	});
+
+	const modal = document.getElementById('modal');
+	modal.addEventListener('click', (e) => {
+		if (e.target === modal)
+		{
+			$('#modal').removeClass('active');
+			$('.bottom-nav').removeClass('hidden');
+			self.location = self.location;
+		}
+	});
+	
+	var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ? true : false;
+	if (!isMobile)
+	{
+		$('.btn-view-cart-fixed, .btn-add-delete').tooltip(
+		{
+			content: function() { return $(this).prop('title'); },
+		});
+	}
+	
+	$(document).on('click', '.btn-view-cart-fixed', function()
+	{
+		$('.wrap-loading').show();
+			
+		$.ajax(
+	  	{
+	  		type:'post',
+	  		url: '/shop/getRebuyList',
+	  		data: 'sct=1',
+			dataType: 'json',
+			async: false,
+			cache:false,
+	  	})
+	  	.done(function(data)
+		{
+	  		var myTimer = setTimeout(function() { $('.wrap-loading').hide(); }, 250);
+	  		
+	  		switch (data.errorCode)
+	  		{
+	  		case 1:
+	  			var o = data.rebuyList;
+	  			var html = '';
+	  			
+	  			for (var i = 0; o != null && i < o.length; i++)
+	  			{
+		  			html += '<div class="cart-item" id="cart-item-';
+		  			html += o[i].product_code + '-' + i;
+		  			html += '">';
+		  			html += '<input type="hidden" id="sell_price" data-item="';
+		  			html += o[i].product_code + '-' + i;
+		  			html += '" value="' + o[i].sell_price + '">';
+		  			html += '<img src="';
+		  			html += o[i].product_image;
+		  			html += '" alt="제품 이미지"';
+		  			html += ' class="cart-item-image" />';
+		  			html += '<div class="cart-item-details">';
+		  			html += '<div class="cart-item-info">';
+		  			html += '<div class="cart-item-name">';
+		  			html += o[i].product_name;
+		  			html += '</div>';
+		  			html += '<div class="cart-item-price">';
+		  			if (o[i].option_name.length > 0)
+		  			{
+		  				html += o[i].option_name + '/';
+		  			}
+		  			html += o[i].sell_price.toLocaleString();
+		  			html += '원</div>';
+		  			html += '</div>';
+		  			html += '<div class="cart-item-controls">';
+		  			html += '<div class="cart-item-quantity-wrapper">';
+		  			html += '<button class="btn-quantity-minus" data-item="';
+		  			html += o[i].product_code + '-' + i;
+		  			html += '">-</button>';
+		  			
+		  			html += '<input type="hidden" name="pcode" value="' +o[i].product_code+ '">';
+		  			html += '<input type="hidden" name="ocode" value="' +o[i].option_code+ '">';
+
+		  			html += '<input type="text" name="buy_count" value="1" min="1" id="bc-';
+		  			html += o[i].product_code + '-' + i;
+		  			html += '" class="cart-item-quantity" />';
+		  			
+		  			html += '<button class="btn-quantity-plus" data-item="';
+		  			html += o[i].product_code + '-' + i;
+		  			html += '">+</button>';
+		  			html += '</div>';
+		  			html += '</div>';
+		  			html += '</div>';
+		  			html += '<button class="btn-cart-remove" data-item="';
+		  			html += o[i].product_code + '-' + i;
+		  			html += '" data-pcode="' + o[i].product_code + '"';
+		  			html += ' data-ocode="' + o[i].option_code + '"';
+		  			html += '>';
+		  			html += '<svg width="18" height="18" viewBox="0 0 24 24" fill="none">';
+		  			html += '<path d="M18 6L6 18M6 6L18 18" stroke="currentColor"';
+		  			html += 'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />';
+		  			html += '</svg>';
+		  			html += '</button>';
+		  			html += '</div>';
+	  			}
+	  			
+	  			if (o == null || o.length == 0)
+	  			{
+	  				html += '<div class="cart-item" style="margin: auto;">';
+	  				html += '재구매 장바구니에 담긴 상품이 없습니다.';
+	  				html += '</div>';
+	  			}
+	  			
+	  			$('#a-cart-list').html(html);
+	  			
+	  			var total = fn_total_price();
+	  			$('#total_price').text(total.toLocaleString());
+	  			
+	  			$('#cartModal').addClass('active');
+				$('.bottom-nav').addClass('hidden');
+	  			break;
+	  		case 10004:
+	  			self.location = '/login';
+	  			break;
+	  		default:
+	  			alert(data.message);
+	  			break;
+	  		}
+		})
+	  	.fail(function(data)
+		{
+			$('.wrap-loading').hide();
+			alert('요청을 처리하지 못했습니다.');
+		});
+	});
+	
+	$(document).on('click', '.btn-quantity-minus', function()
+	{
+		var item = $(this).data('item');
+		var cnt = Number($('#bc-' + item).val());
+		
+		if (Number.isNaN(cnt) || cnt <= 1)
+		{
+			cnt = 1
+		}
+		else
+		{
+			cnt -= 1;
+		}
+		
+		$('#bc-' + item).val(cnt);
+		
+		var total = fn_total_price();
+		$('#total_price').text(total.toLocaleString());
+	});
+	
+
+	$(document).on('click', '.btn-quantity-plus', function()
+	{
+		var item = $(this).data('item');
+		var cnt = Number($('#bc-' + item).val());
+		
+
+		if (Number.isNaN(cnt) || cnt < 1)
+		{
+			cnt = 1
+		}
+		else
+		{
+			cnt += 1;
+		}
+		
+		$('#bc-' + item).val(cnt);
+		
+		var total = fn_total_price();
+		$('#total_price').text(total.toLocaleString());
+	});
+	
+	$(document).on('click', '.btn-cart-remove', function()
+	{
+		var pcode = $(this).data('pcode');
+		var ocode = $(this).data('ocode');
+		var item = $(this).data('item');
+		
+		$('.wrap-loading').show();
+			
+		$.ajax(
+	  	{
+	  		type:'post',
+	  		url: '/shop/actionDeleteRebuy',
+			data: 'sct=1&pcode=' + pcode + '&ocode=' + ocode,
+			dataType: 'json',
+			async: false,
+			cache:false,
+	  	})
+	  	.done(function(data)
+		{
+	  		var myTimer = setTimeout(function() { $('.wrap-loading').hide(); }, 250);
+	  		
+	  		switch (data.errorCode)
+	  		{
+	  		case 1:
+	  			alert('재구매 장바구니에서 삭제하였습니다.');
+	  			$('#cart-item-' + item).remove();
+	  			
+	  			var total = fn_total_price();
+	  			$('#total_price').text(total.toLocaleString());
+	  			break;
+	  		case 10004:
+	  			self.location = '/login';
+	  			break;
+	  		default:
+	  			alert(data.message);
+	  			break;
+	  		}
+		})
+	  	.fail(function(data)
+		{
+			$('.wrap-loading').hide();
+			alert('요청을 처리하지 못했습니다.');
+		});
+	});
+
+	$(document).on('click', '#btnClearCart', function()
+	{
+		$('.wrap-loading').show();
+			
+		$.ajax(
+	  	{
+	  		type:'post',
+	  		url: '/shop/actionDeleteRebuyAll',
+			data: 'sct=1',
+			dataType: 'json',
+			async: false,
+			cache:false,
+	  	})
+	  	.done(function(data)
+		{
+	  		var myTimer = setTimeout(function() { $('.wrap-loading').hide(); }, 250);
+	  		
+	  		switch (data.errorCode)
+	  		{
+	  		case 1:
+	  			$('#a-cart-list').html('');
+	  			$('#total_price').text('0');
+	  			alert('재구매 장바구니 상품을 모두 삭제하였습니다.');
+	  			break;
+	  		case 10004:
+	  			self.location = '/login';
+	  			break;
+	  		default:
+	  			alert(data.message);
+	  			break;
+	  		}
+		})
+	  	.fail(function(data)
+		{
+			$('.wrap-loading').hide();
+			alert('요청을 처리하지 못했습니다.');
+		});
+	});
+	
+	$(document).on('click', '#btn-cart-close', function()
+	{
+		$('#cartModal').removeClass('active');
+		$('.bottom-nav').removeClass('hidden');
+	});
+	
+	const cartModal = document.getElementById('cartModal');
+	cartModal.addEventListener('click', (e) => {
+		if (e.target === cartModal)
+		{
+			$('#cartModal').removeClass('active');
+			$('.bottom-nav').removeClass('hidden');
+		}
+	});
+	
+	$(document).on('click', '#btn-search', function()
+	{
+		var str = $.trim($('#f_search #ss').val());
+		var pno = 1;
+
+		if (str.length == 0)
+		{
+			alert('검색어를 입력하세요.');
+			return false;
+		}
+		
+		var frm = document.f_search;
+		frm.method = 'get';
+		frm.submit();
+	});
+	
+	$(document).on('click', '#btn-fav-delete', function()
+	{
+		var idx = $(this).data('idx');
+		
+		$('#btn-stock-delete').data('idx', idx);
+		$('#div-stock-delete').show();
+	});
+	
+	$(document).on('click', '#btn-stock-delete', function()
+	{
+		var idx = $(this).data('idx');
+		
+		$('#div-stock-delete').hide();
+		$('.wrap-loading').show();
+			
+		$.ajax(
+	  	{
+	  		type:'post',
+	  		url: '/shop/actionDeleteFavorite',
+			data: 'idx=' + idx,
+			dataType: 'json',
+			async: false,
+			cache:false,
+	  	})
+	  	.done(function(data)
+		{
+	  		var myTimer = setTimeout(function() { $('.wrap-loading').hide(); }, 250);
+	  		
+	  		switch (data.errorCode)
+	  		{
+	  		case 1:
+	  			alert('즐겨찾기에 삭제하였습니다.', self.location);
+	  			break;
+	  		case 10004:
+	  			self.location = '/login';
+	  			break;
+	  		default:
+	  			alert(data.message);
+	  			break;
+	  		}
+		})
+	  	.fail(function(data)
+		{
+			$('.wrap-loading').hide();
+			alert('요청을 처리하지 못했습니다.');
+		});
+	});
+	
+	$(document).on('click', '#btn-rebuy', function()
+	{
+		var idx = $(this).data('idx');
+		
+		$('.wrap-loading').show();
+			
+		$.ajax(
+	  	{
+	  		type:'post',
+	  		url: '/shop/actionAddRebuy',
+			data: 'idx=' + idx,
+			dataType: 'json',
+			async: false,
+			cache:false,
+	  	})
+	  	.done(function(data)
+		{
+	  		var myTimer = setTimeout(function() { $('.wrap-loading').hide(); }, 250);
+	  		
+	  		switch (data.errorCode)
+	  		{
+	  		case 1:
+	  			alert('재구매 장바구니에 추가하였습니다.');
+	  			break;
+	  		case 10004:
+	  			self.location = '/login';
+	  			break;
+	  		default:
+	  			alert(data.message);
+	  			break;
+	  		}
+		})
+	  	.fail(function(data)
+		{
+			$('.wrap-loading').hide();
+			alert('요청을 처리하지 못했습니다.');
+		});
+	});
+	
+	$(document).on('click', '.category-filter', function()
+	{
+		var cate = $(this).data('name');
+		$('#f_shopsearch #cate').val(cate);
+		$('.category-filter').removeClass('active');
+		$(this).addClass('active');
+		
+		var str = $.trim($('#f_shopsearch #ss').val());
+		var cate = $.trim($('#f_shopsearch #cate').val());
+		var pno = 1;
+
+		fn_history_search(str, cate, pno);
+	});
+	
+	$(document).on('click', '#btn-shop-search', function()
+	{
+		var str = $.trim($('#f_shopsearch #ss').val());
+		var cate = $.trim($('#f_shopsearch #cate').val());
+		var pno = 1;
+
+		if (str.length == 0)
+		{
+			alert('검색어를 입력하세요.');
+			return false;
+		}
+		
+		fn_history_search(str, cate, pno);
+	});
+	
+	$(document).on('click', '.btn-save',function()
+	{
+		var idx = $(this).data('idx');
+		
+		$('.wrap-loading').show();
+			
+		$.ajax(
+	  	{
+	  		type:'post',
+	  		url: '/stock/actionProductFavorite',
+			data: 'idx=' + idx,
+			dataType: 'json',
+			async: false,
+			cache:false,
+	  	})
+	  	.done(function(data)
+		{
+	  		var myTimer = setTimeout(function() { $('.wrap-loading').hide(); }, 250);
+	  		
+	  		switch (data.errorCode)
+	  		{
+	  		case 1:
+	  			alert('즐겨찾기에 추가하였습니다.');
+	  			break;
+	  		case 10004:
+	  			self.location = '/login';
+	  			break;
+	  		default:
+	  			alert(data.message);
+	  			break;
+	  		}
+		})
+	  	.fail(function(data)
+		{
+			$('.wrap-loading').hide();
+			alert('요청을 처리하지 못했습니다.');
+		});
+	});
+	
+	$(document).on('click', '.btn-home', function()
+	{
+		self.location = '/main';
+	});
+	
+	$(document).on('click', '#btnPurchase', function()
+	{
+		var pcode = '';
+		var ocode = '';
+		var bcnt = '';
+		
+		$('input[name="pcode"]').each(function()
+		{
+			pcode += $(this).val() + '\t';
+		});
+		pcode = pcode.slice(0, -1);
+		$('input[name="ocode"]').each(function()
+		{
+			var v = $.trim($(this).val());
+			if (v.length == 0)
+			{
+				$(this).val(' ');
+				v = ' ';
+			}
+			ocode += v + '\t';
+		});
+		ocode = ocode.slice(0, -1);
+		$('input[name="buy_count"]').each(function()
+		{
+			bcnt += $(this).val() + '\t';
+		});
+		bcnt = bcnt.slice(0, -1);
+		
+		console.log(pcode);
+		console.log(ocode);
+		console.log(bcnt);
+		
+
+		$('.wrap-loading').show();
+			
+		$.ajax(
+	  	{
+	  		type:'post',
+	  		url: '/shop/actionCartToShop',
+			data: 'pcode=' + pcode + '&ocode=' + ocode + '&bcnt=' + bcnt,
+			dataType: 'json',
+			async: false,
+			cache:false,
+	  	})
+	  	.done(function(data)
+		{
+	  		var myTimer = setTimeout(function() { $('.wrap-loading').hide(); }, 250);
+	  		
+	  		switch (data.errorCode)
+	  		{
+	  		case 1:
+	  			$('#cartModal').removeClass('active');
+	  			$('.bottom-nav').removeClass('hidden');
+
+	  			self.location = '/cart?sct=1';
+	  			break;
+	  		case 10004:
+	  			self.location = '/login';
+	  			break;
+	  		default:
+	  			alert(data.message);
+	  			break;
+	  		}
+		})
+	  	.fail(function(data)
+		{
+			$('.wrap-loading').hide();
+			alert('요청을 처리하지 못했습니다.');
+		});
+	});
+});
+
+function fn_go_page(ss, cate, no)
+{
+	fn_history_search(ss, cate, no);
+}
+
+function fn_history_search(ss, cate, pno)
+{
+	$('.wrap-loading').show();
+	
+	$.ajax(
+  	{
+  		type:'post',
+  		url: '/stock/getHistorySearchList',
+		data: 'ss=' + ss + '&cate=' + cate + '&pno=' + pno,
+		dataType: 'json',
+		async: false,
+		cache:false,
+  	})
+  	.done(function(data)
+	{
+  		var myTimer = setTimeout(function() { $('.wrap-loading').hide(); }, 150);
+  		
+  		switch (data.errorCode)
+  		{
+  		case 1:
+  			var html = '';
+  			var pList = data.productList;
+  			var pageInfo = data.pageInfo;
+  			
+  			for (var i = 0; pList != null && i < pList.length; i++)
+  			{
+  				html += '<tr>';
+  				html += '<td>';
+  				html += '<div class="product-info">';
+  				html += '<img src="';
+  				html += pList[i].sh_product_image;
+  				html += '" class="item-image" />'
+  				html += '<div class="product-details">';
+  				html += '<div class="product-name">';
+  				html += pList[i].sh_product_name;
+  				html += '</div>';
+  				html += '<div class="product-options">';
+  				html += pList[i].sh_category_1;
+  				html += '/';
+  				if (pList[i].sh_option_name != '')
+                {
+                        html += pList[i].sh_option_name;
+                        html += '/';
+                }
+  				html += pList[i].sh_payment_amount.toLocaleString() + '원';
+  				html += '</div>';
+  				html += '</div>';
+  				html += '</div>';
+  				html += '</td>';
+  				html += '<td class="text-center">';
+  				
+  				if (pList[i].is_favorite == 0)
+  				{
+  					html += '<button class="btn-save"';
+  					html += ' data-idx="'+pList[i].idx+'"';
+  					html += '>저장</button>';
+  				}
+  				
+  				html += '</td>';
+  				html += '</tr>';
+  			}
+  			
+  			if (pList == null || pList.length == 0)
+  			{
+  				html += '<tr><td colspan="2" style="text-align:center;height:100px;">검색 결과가 없습니다.</td></tr>';
+  			}
+  			
+  			if (pageInfo != null && pageInfo.totalPage > 1)
+  			{
+	  			html += '<tr>';
+	  			html += '<td colspan="2" style="text-align:center;">';
+	  			html += '<div class="pagenation">';
+	  			html += '<a href="javascript:;" onclick="fn_go_page(';
+	  			html += '\'' + data.ss + '\'';
+	  			html += ',';
+	  			html += '\'' + data.cate + '\'';
+	  			html += ',';
+	  			html += (pno > 1 ? pno - 1 : 1);
+	  			html += ');" class="next_btn">';
+	  			html += '<img src="/images/prev.png">';
+	  			html += '</a>';
+	  			html += '<ul>';
+	  			
+	  			for (var i = pageInfo.curBlockMinPage; i <= pageInfo.curBlockMaxPage; i++)
+	  			{
+		  			html += '<li class="';
+		  			if (i == pageInfo.curPage) html += 'on_page';
+		  			html += '">';
+		  			html += '<a href="javascript:;" onclick="fn_go_page(';
+		  			html += '\'' + data.ss + '\'';
+		  			html += ',';
+		  			html += '\'' + data.cate + '\'';
+		  			html += ',';
+		  			html += i;
+		  			html += ');">' + i + '</a>';
+	  				html += '</li>';
+	  			}
+	  			html += '</ul>';
+	  			html += '<a href="javascript:;" onclick="fn_go_page(';
+	  			html += '\'' + data.ss + '\'';
+	  			html += ',';
+	  			html += '\'' + data.cate + '\'';
+	  			html += ',';
+	  			html += (pno < pageInfo.totalPage ? pno + 1 : pageInfo.totalPage);
+	  			html += ');" class="next_btn">';
+	  			html += '<img src="/images/next.png">';
+	  			html += '</a>';
+	  			html += '</div>';
+	  			html += '</td>';
+	  			html += '</tr>';
+  			}
+  			
+  			$('#shop-product-list').html(html);
+  			break;
+  		case 10004:
+  			self.location = '/login';
+  			break;
+  		default:
+  			alert(data.message);
+  			break;
+  		}
+	})
+  	.fail(function(data)
+  	{
+  		$('.wrap-loading').hide();
+  		alert('요청을 처리하지 못했습니다.');
+  	});
+}
+
+
+function fn_total_price()
+{
+	var total = 0;
+	
+	$('input[id="sell_price"]').each(function(i)
+	{
+		var p = $(this).val();
+		var item = $(this).data('item');
+		var cnt = $('#bc-' + $(this).data('item')).val();
+		
+		total += (p * cnt);
+	});
+	
+	return total;
+}
+</script>
+<style type="text/css">
+.pagenation {
+	display: flex;
+	gap: 12px;
+	align-items: center;
+	justify-content: center
+}
+
+.pagenation img {
+	display: block;
+	width: 14px;
+	height: 14px;
+}
+
+.pagenation ul {
+	display: flex;
+	gap: 6px
+}
+
+.pagenation ul li {
+	border-radius: 3px;
+	border: 1px solid #ededed;
+	width: 20px;
+	height: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pagenation ul li a {
+	color: #000;
+	font-size: 14px;
+	font-weight: 500
+}
+
+.pagenation ul li.on_page a {
+	color: #0063F9
+}
+
+.pagenation .next_btn {
+	border-radius: 3px;
+	border: 1px solid #ededed;
+	width: 20px;
+	height: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.ui-tooltip {
+    padding:10px 20px;
+    color:black;
+    border-radius:5px;
+    width: 300px;
+    max-width:300px;
+}
+</style>
+</head>
+<body>
+	<div class="wrap-loading display-none">
+  	  <div><img src="./쇼핑몰_files/ajax_loader.gif" style="width: 100px; height: 100px;" alt=""></div>
+  	</div>
+  	
+	<div class="container">
+		<header class="header">
+			<div class="header-top">
+				<button class="btn-back" type="button" onclick="history.back();">
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+				</button>
+				<h1 class="header-title">덴딜 Mall</h1>
+				<button class="btn-home">
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+				</button>
+			</div>
+			<nav class="header-nav">
+				<a href="https://dendeal.kr/shop" class="nav-item">쇼핑몰</a>
+				<a href="https://dendeal.kr/stock/main" class="nav-item active">즐겨찾기</a>
+				<a href="https://dendeal.kr/stock/purchasehistory" class="nav-item">구매내역</a>
+				<a href="https://dendeal.kr/stock/statistics" class="nav-item">통계</a>
+			</nav>
+		</header>
+
+		<main class="main-content">
+			<div class="search-section">
+				<button class="btn-add-delete" title="" aria-describedby="ui-id-2">구매 상품</button>
+				<div class="search-box">
+				<form name="f_search" id="f_search" autocomplete="off" onsubmit="return false;" action="https://dendeal.kr/stock/main">
+					<input type="text" name="ss" id="ss" value="" maxlength="32" class="search-input" placeholder="검색">
+					<button class="search-btn" id="btn-search">
+						<svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                			<circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></circle>
+                			<path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              			</svg>
+					</button>
+				</form>
+				</div>
+			</div>
+
+			<!-- Product List -->
+			<div class="product-list">
+			
+			
+						
+			
+				<!-- Category Item -->
+				<div class="category-section">
+					<div class="category-header">
+						<h3 class="category-title">위생소독</h3>
+						<span class="category-count">3개 품목</span>
+					</div>
+					<table class="item-table">
+						<tbody>
+						
+							<tr>
+								<td>
+									<div class="item-product">
+										<img src="./쇼핑몰_files/0090100001402.jpg" alt="제품 이미지" class="item-image">
+										<div class="item-info" style="width: 160px;">
+											<div class="item-name">[1매입 개별포장] 오픈프리 황사 마스크 KF94 대형 (화이트)</div>
+											<div class="item-option">
+											
+												사이즈:대형(가로 210mm x 세로 84mm /귀편 160mm)
+												/
+											
+											
+												380원
+											</div>
+										</div>
+									</div>
+								</td>
+								<td class="text-center">
+									<button class="btn-repurchase" id="btn-fav-delete" data-idx="86">삭제</button>
+									
+										<button class="btn-repurchase" id="btn-rebuy" data-idx="86">담기</button>
+									
+								</td>
+							</tr>
+						
+							<tr>
+								<td>
+									<div class="item-product">
+										<img src="./쇼핑몰_files/2290050001602.jpg" alt="제품 이미지" class="item-image">
+										<div class="item-info" style="width: 160px;">
+											<div class="item-name">Dr.K 바이트 석션 전용 브러시 3EA</div>
+											<div class="item-option">
+											
+											
+											
+												한국
+												/
+											
+											
+												3,000원
+											</div>
+										</div>
+									</div>
+								</td>
+								<td class="text-center">
+									<button class="btn-repurchase" id="btn-fav-delete" data-idx="83">삭제</button>
+									
+										<button class="btn-repurchase" id="btn-rebuy" data-idx="83">담기</button>
+									
+								</td>
+							</tr>
+						
+							<tr>
+								<td>
+									<div class="item-product">
+										<img src="./쇼핑몰_files/0090180000012.jpg" alt="제품 이미지" class="item-image">
+										<div class="item-info" style="width: 160px;">
+											<div class="item-name">M-76 안면보호구 쉴드형 리필 (전면형)</div>
+											<div class="item-option">
+											
+											
+											
+												한국
+												/
+											
+											
+												24,500원
+											</div>
+										</div>
+									</div>
+								</td>
+								<td class="text-center">
+									<button class="btn-repurchase" id="btn-fav-delete" data-idx="84">삭제</button>
+									
+										<button class="btn-repurchase" id="btn-rebuy" data-idx="84">담기</button>
+									
+								</td>
+							</tr>
+						
+						</tbody>
+					</table>
+				</div>
+			
+				<!-- Category Item -->
+				<div class="category-section">
+					<div class="category-header">
+						<h3 class="category-title">치과장비</h3>
+						<span class="category-count">3개 품목</span>
+					</div>
+					<table class="item-table">
+						<tbody>
+						
+							<tr>
+								<td>
+									<div class="item-product">
+										<img src="./쇼핑몰_files/2630000000262.jpg" alt="제품 이미지" class="item-image">
+										<div class="item-info" style="width: 160px;">
+											<div class="item-name">Sonic Surgeon 600L 초음파 수술기 전용 스탠다드 팁</div>
+											<div class="item-option">
+											
+											
+											
+											
+												165,000원
+											</div>
+										</div>
+									</div>
+								</td>
+								<td class="text-center">
+									<button class="btn-repurchase" id="btn-fav-delete" data-idx="85">삭제</button>
+									
+										<button class="btn-repurchase" id="btn-rebuy" data-idx="85">담기</button>
+									
+								</td>
+							</tr>
+						
+							<tr>
+								<td>
+									<div class="item-product">
+										<img src="./쇼핑몰_files/1300010000212.jpg" alt="제품 이미지" class="item-image">
+										<div class="item-info" style="width: 160px;">
+											<div class="item-name">클레보 핸드피스전용 소독기</div>
+											<div class="item-option">
+											
+											
+											
+											
+												550,000원
+											</div>
+										</div>
+									</div>
+								</td>
+								<td class="text-center">
+									<button class="btn-repurchase" id="btn-fav-delete" data-idx="88">삭제</button>
+									
+										<button class="btn-repurchase" id="btn-rebuy" data-idx="88">담기</button>
+									
+								</td>
+							</tr>
+						
+							<tr>
+								<td>
+									<div class="item-product">
+										<img src="./쇼핑몰_files/2520010000392.jpg" alt="제품 이미지" class="item-image">
+										<div class="item-info" style="width: 160px;">
+											<div class="item-name">프로핀 에바 시스템 키트 (PDX/CCK)</div>
+											<div class="item-option">
+											
+												옵션:E-Type Profin Contra-Angle(PDX)
+												/
+											
+											
+												380,000원
+											</div>
+										</div>
+									</div>
+								</td>
+								<td class="text-center">
+									<button class="btn-repurchase" id="btn-fav-delete" data-idx="89">삭제</button>
+									
+										<button class="btn-repurchase" id="btn-rebuy" data-idx="89">담기</button>
+									
+								</td>
+							</tr>
+						
+						</tbody>
+					</table>
+				</div>
+			
+				<!-- Category Item -->
+				<div class="category-section">
+					<div class="category-header">
+						<h3 class="category-title">기공재료</h3>
+						<span class="category-count">1개 품목</span>
+					</div>
+					<table class="item-table">
+						<tbody>
+						
+							<tr>
+								<td>
+									<div class="item-product">
+										<img src="./쇼핑몰_files/2930050000142.jpg" alt="제품 이미지" class="item-image">
+										<div class="item-info" style="width: 160px;">
+											<div class="item-name">스마트 베이스 파샬 지그</div>
+											<div class="item-option">
+											
+												옵션:S(1개)
+												/
+											
+											
+												1,200원
+											</div>
+										</div>
+									</div>
+								</td>
+								<td class="text-center">
+									<button class="btn-repurchase" id="btn-fav-delete" data-idx="87">삭제</button>
+									
+										<button class="btn-repurchase" id="btn-rebuy" data-idx="87">담기</button>
+									
+								</td>
+							</tr>
+						
+						</tbody>
+					</table>
+				</div>
+			
+				
+			</div>
+		</main>
+	</div>
+
+	<!-- Fixed Cart Button -->
+	<button class="btn-view-cart-fixed" title="• &lt;span style=&#39;font-size:14px;&#39;&gt;구매상품은 30분 뒤에 자동 등록됨&lt;/span&gt;&lt;br&gt;• &lt;span style=&#39;font-size:14px;&#39;&gt;삭제 및 추가로 필요한 재료만 관리 가능&lt;/span&gt;">장바구니</button>
+
+	<!-- Fixed Bottom Navigation -->
+	
+
+
+
+
+<style>
+.foot_nav a.f_icon00 i{background-image: url(/images/foot00.png); background-size: 22.5px auto}
+.btn_group {
+	position: relative;
+	width: 24px;
+	height: 24px;
+}
+.chat_badge {
+width: 22px;
+height: 22px;
+border-radius: 22px;
+background-color: #d00a00;
+color: #fff;
+display: flex;
+font-size: 12px;
+justify-content: center;
+align-items: center;
+position: absolute;
+right: -9px;
+top: -15px;
+z-index:11;
+}
+
+.nav_right{position: fixed; z-index: 9999;
+    top: 0; right: -100%; width: 100%; height: 100%;
+    transition-duration: .5s;
+    
+}
+
+
+.nav_right.on_nav{right: 0;}
+
+.nav_right .nav_content{position: absolute; right: 0; top: 0; width: 90%; background: #fff; height: 100%; 
+overflow-y: auto}
+.nav_right .nav_content .adv{position: absolute; right: 20px; top: 15px; }
+
+.nav_right .bg{position: absolute; z-index: -1;
+width: 100%; height: 100%; background: rgba(0,0,0,0.23); opacity: 0; transition-duration: .5s; transition-delay: .5s}
+
+.nav_right.on_nav .bg{opacity: 1}
+
+
+.nav_title{padding: 0 25px; margin-top: 70px}
+.nav_title h2{font-weight: 700; font-size: 20px}
+.nav_title h2 b{color: #0063F9; font-size: 25px}
+
+a {text-decoration: none; color: inherit}
+
+a.login_btn{text-align: center; font-size: 15px; color: #0063F9;
+height: 40px; line-height: 40px; border: 1px solid #0063F9; width: 135px; display: flex; align-items: center; justify-content: center; border-radius: 5px; margin: 30px auto 0; font-weight: 500}
+
+.nav_list{margin-top: 20px;}
+.nav_list a{display: block; padding: 20px; border-bottom: 1px solid #DAE2F0; display: flex; align-items: center; justify-content: flex-start; gap:12px; color: #000; font-weight: 500}
+
+.nav_list a img{max-width: 24px}
+
+.company_info{padding:50px 25px 30px; position: relative; left: 0; bottom: 0; width: 100%}
+.company_info p{font-size: 12px;}
+</style>
+<div class="bottom-nav">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<a href="javascript:;" onclick="go_menu(&#39;/morning/delivery&#39;);" class="f_icon01 ">
+		<div class="btn_group">
+			<img src="./쇼핑몰_files/foot01.png" style="width:80%;">
+		</div>
+	</a>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<a href="javascript:;" onclick="go_menu(&#39;/quick/main&#39;);" class="f_icon02 ">
+		<div class="btn_group">
+			<img src="./쇼핑몰_files/foot02.png" style="width:80%;">
+		</div>
+	</a>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<a href="javascript:;" onclick="go_menu(&#39;/cnc/request&#39;);" class="f_icon06 ">
+		<div class="btn_group">
+			<img src="./쇼핑몰_files/foot06.png" style="width:90%;">
+		</div>
+	</a>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<a href="javascript:;" onclick="go_menu(&#39;/dentalk/main&#39;);" class="f_icon03 ">
+		<div class="btn_group">
+			<img src="./쇼핑몰_files/foot03.png" style="width:80%;">
+		
+		</div>
+	</a>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<a href="javascript:;" onclick="go_menu(&#39;/stock/main&#39;);" class="f_icon05  on">
+		<div class="btn_group">
+			<img src="./쇼핑몰_files/foot05.png" style="width:80%;">
+		</div>
+	</a>
+	
+	
+	
+	
+	
+	<a href="javascript:;" onclick="open_right_menu();" class="f_icon00">
+		<div class="btn_group">
+			<img src="./쇼핑몰_files/foot00.png" style="width:90%;">
+		</div>
+	</a>
+	
+</div>
+
+<script>
+function go_menu(url)
+{
+	self.top.location = url;
+}
+
+function open_right_menu()
+{
+	$(".nav_right").addClass("on_nav");
+}
+
+$(function()
+{
+	/*
+	var talkChk = setInterval(function()
+	{
+		$.ajax(
+		{
+			type:'post',
+			url: '/dentalk/getUnReadChatCount',
+			dataType: 'json',
+			cache:false
+		})
+		.done(function(data)
+		{
+			console.log(data.talkCount);
+			console.log(data.talkAlarm);
+			console.log(self.location.pathname);
+			
+			var pathname = self.location.pathname;
+			
+			if (pathname.startsWith('/dentalk/chat/')) clearInterval(talkChk);
+			
+			if (data.errorCode == 1)
+			{
+				if (data.talkCount > 0)
+				{
+					$('.chat_badge').text(data.talkCount).show();
+				}
+				else
+				{
+					$('.chat_badge').text("0").hide();
+				}
+				if (data.talkAlarm == 'Y')
+				{
+                    $("body").append('<div id="dentalk_alram"><audio autoplay><source src="/images/mp3/alram.mp3"></audio></div>');
+				}
+				else
+				{
+					$("#dentalk_alram").remove();
+				}
+			}
+		})
+		.fail(function(data)
+		{
+			console.log('--talk check error..');
+			clearInterval(talkChk);
+		});
+	}, 1000 * 60 * 10);
+	*/
+});
+</script>
+<!--right_nav-->
+
+<script>
+$(function()
+{
+	$("#btn-close-right").click(function()
+	{
+		$(".nav_right").removeClass("on_nav");
+	});
+});
+function goUrl(url)
+{
+	$(".nav_right").removeClass("on_nav");
+	var myTimer = setTimeout(function() { self.top.location = url; }, 500);
+}
+</script>
+			<div class="nav_right">
+                <div class="nav_content">
+                    <a href="javascript:;" id="btn-close-right" class="adv">
+                        <img src="./쇼핑몰_files/close.png">
+                    </a>
+
+                    <div class="nav_title">
+                        <h2 class="f24">환영합니다<b>!</b><br>
+                            <b>
+                            덴딜
+                            
+                      			
+                      			
+                      			
+                    		
+                            </b>
+                        </h2>
+
+                        <a href="https://dendeal.kr/logout" class="login_btn">
+                            로그아웃
+                        </a>
+                    </div>
+                    <div class="nav_list">
+                        <a href="javascript:;" onclick="goUrl(&#39;/notice&#39;);">
+                            <img src="./쇼핑몰_files/notice.png">
+                            <span>공지사항</span>
+                        </a>
+                        <a href="javascript:;" onclick="goUrl(&#39;/user/mypage&#39;);">
+                            <img src="./쇼핑몰_files/mypage.png">
+                            <span>마이페이지</span>
+                        </a>
+                        
+                        <a href="javascript:;" onclick="goUrl(&#39;/service/inquiry&#39;);">
+                            <img src="./쇼핑몰_files/inq.png">
+                            <span>제휴문의</span>
+                        </a>
+                        <a href="javascript:;" onclick="goUrl(&#39;/service/service&#39;);">
+                            <img src="./쇼핑몰_files/prv.png">
+                            <span>서비스 이용약관</span>
+                        </a>
+                        <a href="javascript:;" onclick="goUrl(&#39;/service/privacy&#39;);">
+                            <img src="./쇼핑몰_files/prv2.png">
+                            <span>개인정보 처리방침</span>
+                        </a>
+                    </div>
+
+                    <div class="company_info">
+                        <p>(주) 덴탈서비스<br><br>
+
+    경기도 안양시 동안구 엘에스로 136, B111호<br>
+    <b>대표</b> : 김상우  <b>사업자등록번호</b> : 544-81-00552<br>
+    <b>전화</b> : 031-360-0415<br>
+    <b>통신판매업신고번호</b> : 제 2022-안양동안-1525 호<br>
+    <b>의료기기판매업신고증</b> : 제 2025-3830263-00038호<br>
+    <b>개인정보 보호책임자</b> : 김상우<br><br>
+
+    Copyright © 2024 (주)덴탈서비스. All Rights Reserved.</p>
+                    </div>
+                </div>
+                <div class="bg"></div>
+            </div>
+	
+	
+<script>
+var alert = function(msg, url)
+{
+	$('#pop-message').html(msg);
+	$('#alert-pop').show();
+	$('#btn-pop-close').data('target-url', url);
+}
+
+$(function()
+{
+	$(document).on('click', '#btn-insure', function()
+	{
+		$('#dlv-insure-code').show();
+	});
+	
+	$(document).on('click', '#btn-pop-close', function()
+	{
+		var target = $(this).data('target-url');
+		$('#alert-pop').hide();
+		
+		$(this).data('target-url', '');
+		
+		if (typeof target == 'undefined' || target == null || target == '')
+		{
+		}
+		else
+		{
+			self.location.replace(target);
+		}
+	});
+});
+</script>
+<style>
+.pop {
+	position: fixed; left: 0; top: 0;
+	background: rgba(0,0,0,0.5); z-index: 9999; width: 100%; height: 100%; }
+.pop .pop_content {
+	position: absolute; max-width: 340px; 
+	text-align: center; background: #fff; border-radius: 10px; border: 1px solid #8B8B8B;
+	left: 50%; top: 50%;width: 100%; transform: translate(-50%, -50%); overflow: hidden; }
+.pop .pop_content h2 { background: #0063F9; color: #fff; font-size: 20px; padding: 10px; }
+.pop .pop_content .txt{padding: 30px 25px; max-height: 80vh; overflow-y: auto}
+.pop .pop_content .txt p{font-size: 16px; word-break: keep-all}
+.pop_btn{display: flex; gap:10px; margin-top: 40px; align-items: center; justify-content: center}
+
+.second_btn {
+	width: 100%; height: 40px;color: #fff; font-size: 14px; text-align: center;
+	padding: 0 12px; border-radius: 5px; background: #0063F9; line-height: 38px;
+	border: 1px solid #0063F9; display: flex; gap: 12px; align-items: center; justify-content: center; }
+</style>
+		<div class="pop" id="alert-pop" style="display:none;">
+			<div class="pop_content">
+				<h2>덴딜</h2>
+				<div class="txt">
+					<p id="pop-message"></p>
+					<div class="pop_btn">
+						<a href="javascript:;" class="second_btn" id="btn-pop-close">획인</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="pop" id="div-stock-delete" style="display:none;">
+			<div class="pop_content">
+				<h2>덴딜</h2>
+				<div class="txt">
+					<p id="pop-message">상품을 즐겨찾기에서 삭제할까요?</p>
+					<div class="pop_btn">
+						<a href="javascript:;" onclick="$(&#39;#div-stock-delete&#39;).hide();" class="second_btn line">취소</a>
+						<a href="javascript:;" class="second_btn" id="btn-stock-delete">획인</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	
+	
+	<!-- Cart Modal -->
+	<div class="modal-overlay" id="cartModal">
+		<div class="modal">
+			<div class="modal-header">
+				<h2 class="modal-title">장바구니</h2>
+				<button class="btn-close" id="btn-cart-close">
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+				</button>
+			</div>
+
+			<div class="modal-body">
+				<div class="cart-list" id="a-cart-list">
+
+				</div>
+			</div>
+
+			<div class="modal-footer">
+				<div class="cart-total">
+					<span>총 금액</span> <strong><span id="total_price">0</span>원</strong>
+				</div>
+				<div class="modal-actions">
+					<button class="btn-text" id="btnClearCart">전체비우기</button>
+					<button class="btn-primary" id="btnPurchase">쇼핑몰 장바구니 담기</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal -->
+	<div class="modal-overlay" id="modal">
+		<div class="modal">
+			<div class="modal-header">
+				<h2 class="modal-title">구매 상품</h2>
+				<button class="btn-close" id="btn-modal-close">
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              			<path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            		</svg>
+				</button>
+			</div>
+			<div class="modal-search">
+				<div class="search-box">
+				<form name="f_shopsearch" id="f_shopsearch" autocomplete="off" onsubmit="return false;" action="https://dendeal.kr/stock/main">
+					<input type="text" id="ss" name="ss" maxlength="32" class="search-input" placeholder="상품 검색">
+					<input type="hidden" id="cate" name="cate"> 
+					<button class="search-btn" id="btn-shop-search">
+						<svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                			<circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></circle>
+                			<path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              			</svg>
+					</button>
+				</form>
+				</div>
+				<div class="category-filters">
+					<button class="category-filter active" id="btn-search-cate" data-name="">전체</button>
+					<button class="category-filter" id="btn-search-cate" data-name="진료재료">진료재료</button>
+					<button class="category-filter" id="btn-search-cate" data-name="위생소독">위생소독</button>
+					<button class="category-filter" id="btn-search-cate" data-name="진료기구">진료기구</button>
+					<button class="category-filter" id="btn-search-cate" data-name="교정재료">교정재료</button>
+					<button class="category-filter" id="btn-search-cate" data-name="임플장비">임플장비</button>
+					<button class="category-filter" id="btn-search-cate" data-name="치과장비">치과장비</button>
+					<button class="category-filter" id="btn-search-cate" data-name="합금/블록">합금/블록</button>
+					<button class="category-filter" id="btn-search-cate" data-name="기공재료">기공재료</button>
+					<button class="category-filter" id="btn-search-cate" data-name="기공장비">기공장비</button>
+				</div>
+			</div>
+			<div class="modal-body">
+				<table class="product-table">
+					<thead>
+						<tr>
+							<th class="col-product">상품</th>
+							<th class="col-save">저장</th>
+						</tr>
+					</thead>
+					<tbody id="shop-product-list">
+					</tbody>
+				</table>
+			</div>
+			
+			
+		</div>
+	</div>
+
+
+<div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"><div style="display: none;">• <span style="font-size:14px;">구매상품은 30분 뒤에 자동 등록됨</span><br>• <span style="font-size:14px;">삭제 및 추가로 필요한 재료만 관리 가능</span></div><div>• <span style="font-size:14px;">구매상품은 30분 뒤에 자동 등록됨</span><br>• <span style="font-size:14px;">삭제 및 추가로 필요한 재료만 관리 가능</span></div></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="tooltip" id="ui-id-2" class="ui-tooltip ui-corner-all ui-widget-shadow ui-widget ui-widget-content" style="top: 179px; left: 753.5px; display: block; opacity: 0.943707;"><div class="ui-tooltip-content">• <span style="font-size:14px;">구매상품은 30분 뒤에 자동 등록됨</span><br>• <span style="font-size:14px;">삭제 및 추가로 필요한 재료만 관리 가능</span></div></div></body></html>

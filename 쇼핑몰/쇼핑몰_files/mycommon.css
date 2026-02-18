@@ -1,0 +1,85 @@
+.wrap-loading{ /*화면 전체를 어둡게 합니다.*/
+    position: fixed;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    z-index: 9999;
+    background: rgba(0,0,0,0.2); /*not in ie */
+    filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr='#20000000', endColorstr='#20000000');    /* ie */
+}
+.wrap-loading div{ /*로딩 이미지*/
+	position: fixed;
+	top:50%;
+	left:50%;
+	margin-left: -21px;
+	margin-top: -21px;
+}
+.display-none{ /*감추기*/
+	display:none;
+}
+
+.pop {
+	position: fixed; left: 0; top: 0;
+	background: rgba(0,0,0,0.5); z-index: 1004; width: 100%; height: 100%
+}
+.pop .pop_content {
+	position: absolute; max-width: 640px; 
+	text-align: left; background: #fff; border-radius: 10px;
+	border: 1px solid #8B8B8B; left: 50%; top: 50%; width: 100%;
+	transform: translate(-50%, -50%); overflow: hidden;
+}
+.pop .pop_content h2{background: #0063F9; color: #fff; font-size: 20px; padding: 20px 30px}
+.pop .pop_content .txt{padding: 30px 30px; max-height: 80vh; overflow-y: auto}
+.pop_content .btn_are{margin-top: 40px}
+
+.form_are{}
+.form_are ul {
+	display: flex; gap:10px 30px;
+	flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+.form_are ul li{width: calc(50% - 15px); display: flex; align-items: center;}
+.form_are ul li.flex_start{align-items: flex-start;}
+.form_are ul li.flex_start p{padding-top: 10px}
+.form_are ul li.w100{width: 100%}
+.form_are ul li p{width: 110px; font-size: 15px; padding: 0px 10px 0px 0; font-size: 14px}
+.form_are ul li p + *{flex:1}
+.form_are ul li p + p{flex:none}
+.form_are ul li p span{color: red}
+.form_are ul li .flex_form_are p{width: 100%; font-size: 12px; padding: 0 !important; margin-top: 5px }
+.form_are input {
+	height: 44px; border-radius: 5px; border: 1px solid #E0E0E0;
+	padding: 0 10px; font-size: 14px; width: 100%; line-height: 42px; background: #fff
+}
+
+.btn_input{display: flex; gap:10px}
+.btn_input.del{gap:0}
+.btn_input.del input{border-radius: 5px 0 0 5px}
+
+.sub_btn {
+	border: 1px solid #0063F9; font-size: 14px; color: #0063F9;
+	border-radius: 5px; height: 44px; line-height: 42px; padding: 0 25px;
+}
+.del_btn {
+	border: 1px solid #E0E0E0; width: 44px; height: 44px; display: flex;
+	border-radius: 0 5px 5px 0; border-left: 0;
+    justify-content: center; align-items: center;
+}
+.btn_s {
+	border: 1px solid #E0E0E0; width: 44px; height: 44px; display: flex;
+	border-radius: 5px; justify-content: center; align-items: center;
+}    
+.gray_btn {
+	border: 1px solid #646464; font-size: 14px; color: #646464; border-radius: 5px;
+	height: 44px; line-height: 42px; padding: 0 25px;
+}  
+.black_btn {
+	border: 1px solid #212226; font-size: 14px; color: #fff; border-radius: 5px;
+	height: 44px; line-height: 42px; padding: 0 25px; background: #212226;
+}
+.btn_are {
+	display: flex; margin-top: 80px; align-items: center;
+    justify-content: center; gap:10px;
+}

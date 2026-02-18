@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기공물 배송 서비스 - DENDEAL | 수거부터 납품까지 원스톱</title>
+<meta name="description" content="덴딜 기공물 배송 서비스 - 치아의 위생과 보존 상태를 우선하는 새벽배송·퀵배송 전문 플랫폼. 수거부터 납품까지 원스톱 서비스.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ===== DESIGN TOKENS ===== */
+:root {
+  --primary: #0B6954;
+  --primary-light: #0E8C6F;
+  --primary-dark: #084D3E;
+  --primary-50: #ECFDF5;
+  --primary-100: #D1FAE5;
+  --accent: #F97316;
+  --accent-hover: #EA580C;
+  --accent-glow: rgba(249,115,22,.15);
+  --blue: #2563EB;
+  --blue-50: #EFF6FF;
+  --purple: #7C3AED;
+  --purple-50: #F5F3FF;
+  --surface: #FFFFFF;
+  --surface-alt: #F8FAF9;
+  --text-primary: #111827;
+  --text-secondary: #4B5563;
+  --text-tertiary: #9CA3AF;
+  --border: #E5E7EB;
+  --border-light: #F3F4F6;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.07);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,.1);
+  --shadow-xl: 0 24px 60px rgba(0,0,0,.12);
+  --transition: .3s cubic-bezier(.4,0,.2,1);
+  --font-display: 'Inter', 'Noto Sans KR', sans-serif;
+  --font-body: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--surface);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+a { text-decoration:none; color:inherit; }
+button { border:none; background:none; cursor:pointer; font:inherit; }
+.container { max-width:1140px; margin:0 auto; padding:0 24px; }
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+@keyframes float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-8px); } }
+@keyframes pulse-dot { 0%,100% { opacity:1; } 50% { opacity:.3; } }
+@keyframes truck-move { 0% { transform:translateX(-20px); opacity:0; } 100% { transform:translateX(0); opacity:1; } }
+@keyframes line-grow { from { transform:scaleX(0); } to { transform:scaleX(1); } }
+
+.reveal { opacity:0; transform:translateY(28px); transition: opacity .6s cubic-bezier(.4,0,.2,1), transform .6s cubic-bezier(.4,0,.2,1); }
+.reveal.visible { opacity:1; transform:translateY(0); }
+.reveal-delay-1 { transition-delay:.1s; }
+.reveal-delay-2 { transition-delay:.2s; }
+.reveal-delay-3 { transition-delay:.3s; }
+.reveal-delay-4 { transition-delay:.4s; }
+.reveal-delay-5 { transition-delay:.5s; }
+
+/* ===== NAVIGATION ===== */
+.nav {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  background:rgba(255,255,255,.85);
+  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid transparent;
+  transition:var(--transition);
+}
+.nav.scrolled {
+  background:rgba(255,255,255,.95);
+  border-bottom-color:var(--border);
+  box-shadow:0 1px 12px rgba(0,0,0,.04);
+}
+.nav-inner {
+  display:flex; align-items:center; justify-content:space-between;
+  height:64px;
+}
+.nav-logo {
+  font-family:var(--font-display);
+  font-weight:900; font-size:22px; color:var(--primary);
+  letter-spacing:-.5px; display:flex; align-items:center;
+}
+.nav-logo span { color:var(--accent); }
+.nav-menu { display:flex; align-items:center; gap:32px; }
+.nav-menu a {
+  font-size:14px; font-weight:500; color:var(--text-secondary);
+  transition:var(--transition); position:relative; padding:4px 0;
+}
+.nav-menu a::after {
+  content:''; position:absolute; bottom:-2px; left:0; right:0;
+  height:2px; background:var(--primary); border-radius:2px;
+  transform:scaleX(0); transition:var(--transition);
+}
+.nav-menu a:hover { color:var(--primary); }
+.nav-menu a:hover::after { transform:scaleX(1); }
+.nav-menu a.active { color:var(--primary); font-weight:700; }
+.nav-menu a.active::after { transform:scaleX(1); }
+.nav-actions { display:flex; align-items:center; gap:8px; }
+.nav-login {
+  font-size:14px; font-weight:500; color:var(--text-secondary);
+  padding:8px 16px; border-radius:var(--radius-full); transition:var(--transition);
+}
+.nav-login:hover { color:var(--primary); background:var(--primary-50); }
+.nav-cta-btn {
+  font-size:13px; font-weight:700; color:#fff;
+  background:var(--primary); padding:9px 22px;
+  border-radius:var(--radius-full); transition:var(--transition);
+}
+.nav-cta-btn:hover {
+  background:var(--primary-light);
+  box-shadow:0 4px 14px rgba(11,105,84,.25);
+  transform:translateY(-1px);
+}
+.nav-toggle {
+  display:none; width:40px; height:40px;
+  align-items:center; justify-content:center;
+  border-radius:var(--radius-sm);
+}
+.nav-toggle-bar {
+  width:20px; height:2px; background:var(--text-primary);
+  position:relative; transition:var(--transition);
+}
+.nav-toggle-bar::before,
+.nav-toggle-bar::after {
+  content:''; position:absolute; left:0; width:100%; height:2px;
+  background:var(--text-primary); transition:var(--transition);
+}
+.nav-toggle-bar::before { top:-6px; }
+.nav-toggle-bar::after { top:6px; }
+.nav-toggle.active .nav-toggle-bar { background:transparent; }
+.nav-toggle.active .nav-toggle-bar::before { top:0; transform:rotate(45deg); }
+.nav-toggle.active .nav-toggle-bar::after { top:0; transform:rotate(-45deg); }
+.mobile-menu {
+  display:none; position:fixed; top:64px; left:0; right:0; bottom:0;
+  background:rgba(255,255,255,.98); backdrop-filter:blur(20px);
+  z-index:99; padding:24px;
+  transform:translateX(100%); transition:transform .35s cubic-bezier(.4,0,.2,1);
+}
+.mobile-menu.open { transform:translateX(0); }
+.mobile-menu a {
+  display:block; padding:16px 0; font-size:17px; font-weight:600;
+  color:var(--text-primary); border-bottom:1px solid var(--border-light);
+  transition:var(--transition);
+}
+.mobile-menu a:hover { color:var(--primary); }
+.mobile-menu .mobile-cta {
+  display:block; text-align:center; margin-top:24px;
+  background:var(--primary); color:#fff; padding:14px;
+  border-radius:var(--radius-md); font-weight:700; font-size:15px;
+  border-bottom:none;
+}
+
+/* ===== PAGE HERO ===== */
+.page-hero {
+  padding:140px 0 80px;
+  background:linear-gradient(165deg, #053D32 0%, #0B6954 45%, #0E8C6F 100%);
+  position:relative; overflow:hidden;
+}
+.page-hero::before {
+  content:''; position:absolute; top:-40%; right:-15%;
+  width:700px; height:700px;
+  background:radial-gradient(circle, rgba(255,255,255,.03) 0%, transparent 70%);
+  border-radius:50%;
+}
+.page-hero-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:60px; align-items:center; position:relative; z-index:1;
+}
+.page-hero-content { animation:fadeUp .7s ease both; }
+.page-hero-breadcrumb {
+  display:flex; align-items:center; gap:8px;
+  font-size:13px; color:rgba(255,255,255,.45);
+  margin-bottom:24px;
+}
+.page-hero-breadcrumb a { color:rgba(255,255,255,.45); transition:var(--transition); }
+.page-hero-breadcrumb a:hover { color:rgba(255,255,255,.8); }
+.page-hero-breadcrumb svg { width:14px; height:14px; opacity:.5; }
+.page-hero-badge {
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.1);
+  backdrop-filter:blur(8px); padding:7px 16px;
+  border-radius:var(--radius-full);
+  font-size:12px; font-weight:600; color:rgba(255,255,255,.8);
+  margin-bottom:24px; letter-spacing:.5px;
+}
+.page-hero-badge::before {
+  content:''; width:6px; height:6px; border-radius:50%;
+  background:var(--accent); animation:pulse-dot 2s infinite;
+}
+.page-hero h1 {
+  font-family:var(--font-display);
+  font-size:44px; font-weight:900; line-height:1.2;
+  color:#fff; letter-spacing:-2px; margin-bottom:20px;
+}
+.page-hero h1 em {
+  font-style:normal;
+  background:linear-gradient(135deg,#5BE8C8,#A0F0D4);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.page-hero-desc {
+  font-size:16px; line-height:1.85; color:rgba(255,255,255,.55);
+  max-width:460px; margin-bottom:32px;
+}
+.page-hero-btns { display:flex; gap:12px; flex-wrap:wrap; }
+.btn-primary {
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--accent); color:#fff;
+  padding:14px 32px; border-radius:var(--radius-full);
+  font-weight:700; font-size:15px;
+  transition:var(--transition);
+  box-shadow:0 4px 20px rgba(249,115,22,.3);
+}
+.btn-primary:hover {
+  background:var(--accent-hover); transform:translateY(-2px);
+  box-shadow:0 8px 28px rgba(249,115,22,.4);
+}
+.btn-primary svg { transition:transform .2s; }
+.btn-primary:hover svg { transform:translateX(3px); }
+.btn-secondary {
+  display:inline-flex; align-items:center; gap:8px;
+  background:transparent; color:rgba(255,255,255,.8);
+  padding:14px 32px; border-radius:var(--radius-full);
+  font-weight:600; font-size:15px;
+  border:1.5px solid rgba(255,255,255,.18);
+  transition:var(--transition);
+}
+.btn-secondary:hover {
+  border-color:rgba(255,255,255,.45); color:#fff;
+  background:rgba(255,255,255,.05); transform:translateY(-2px);
+}
+
+/* Hero Visual */
+.page-hero-visual {
+  animation:fadeUp .8s ease .2s both;
+  display:flex; justify-content:center; align-items:center;
+  position:relative;
+}
+.hero-app-img {
+  width:300px; border-radius:28px;
+  box-shadow:0 40px 80px rgba(0,0,0,.35);
+}
+.hero-splash-badge {
+  position:absolute; width:140px; border-radius:16px;
+  box-shadow:var(--shadow-lg); border:3px solid rgba(255,255,255,.15);
+  animation:float 4s ease-in-out infinite;
+}
+.hero-splash-badge.tl { top:0; left:0; }
+.hero-splash-badge.br { bottom:20px; right:0; animation-delay:1.5s; }
+
+/* ===== SECTION COMMON ===== */
+.section { padding:100px 0; }
+.section-alt { background:var(--surface-alt); }
+.section-header { text-align:center; margin-bottom:56px; }
+.section-tag {
+  display:inline-flex; align-items:center; gap:5px;
+  background:var(--primary-50); color:var(--primary);
+  padding:6px 14px; border-radius:var(--radius-full);
+  font-size:11px; font-weight:700; letter-spacing:.8px;
+  margin-bottom:16px; text-transform:uppercase;
+}
+.section-header h2 {
+  font-family:var(--font-display);
+  font-size:36px; font-weight:900; letter-spacing:-1.5px;
+  line-height:1.3; margin-bottom:14px;
+}
+.section-header h2 em { font-style:normal; color:var(--primary); }
+.section-header p {
+  font-size:15px; color:var(--text-secondary); line-height:1.75;
+  max-width:520px; margin:0 auto;
+}
+
+/* ===== KEY FEATURES ===== */
+.key-features {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:20px;
+}
+.key-feature {
+  background:var(--surface); border-radius:var(--radius-lg);
+  padding:32px 24px; border:1px solid var(--border);
+  text-align:center; transition:var(--transition); position:relative;
+}
+.key-feature:hover {
+  transform:translateY(-4px); box-shadow:var(--shadow-lg);
+  border-color:transparent;
+}
+.kf-icon {
+  width:56px; height:56px; border-radius:var(--radius-md);
+  display:flex; align-items:center; justify-content:center;
+  font-size:26px; margin:0 auto 18px; transition:var(--transition);
+}
+.kf-icon.green { background:var(--primary-50); }
+.kf-icon.orange { background:var(--accent-glow); }
+.kf-icon.blue { background:var(--blue-50); }
+.kf-icon.purple { background:var(--purple-50); }
+.key-feature:hover .kf-icon { transform:scale(1.08); }
+.key-feature h3 {
+  font-size:17px; font-weight:800; margin-bottom:8px; letter-spacing:-.3px;
+}
+.key-feature p { font-size:13.5px; line-height:1.75; color:var(--text-secondary); }
+
+/* ===== DELIVERY TYPES ===== */
+.delivery-types {
+  display:grid; grid-template-columns:1fr 1fr; gap:24px;
+}
+.delivery-type {
+  background:var(--surface); border-radius:var(--radius-xl);
+  overflow:hidden; border:1px solid var(--border);
+  transition:var(--transition);
+}
+.delivery-type:hover {
+  transform:translateY(-4px); box-shadow:var(--shadow-lg);
+  border-color:transparent;
+}
+.dt-header {
+  padding:36px 32px 28px; position:relative; overflow:hidden;
+}
+.dt-header.dawn {
+  background:linear-gradient(135deg,#0F172A,#1E293B);
+  color:#fff;
+}
+.dt-header.quick {
+  background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+  color:#fff;
+}
+.dt-header::before {
+  content:''; position:absolute; top:-30px; right:-30px;
+  width:120px; height:120px;
+  background:radial-gradient(circle,rgba(255,255,255,.06) 0%,transparent 70%);
+  border-radius:50%;
+}
+.dt-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.12);
+  padding:5px 12px; border-radius:var(--radius-full);
+  font-size:11px; font-weight:700; margin-bottom:16px; letter-spacing:.5px;
+}
+.dt-badge::before {
+  content:''; width:5px; height:5px; border-radius:50%;
+}
+.dt-header.dawn .dt-badge::before { background:#FCD34D; }
+.dt-header.quick .dt-badge::before { background:var(--accent); }
+.dt-header h3 {
+  font-family:var(--font-display);
+  font-size:28px; font-weight:900; letter-spacing:-1px; margin-bottom:8px;
+}
+.dt-header p { font-size:14px; line-height:1.7; opacity:.65; }
+.dt-body { padding:28px 32px; }
+.dt-info-row {
+  display:flex; align-items:center; gap:14px;
+  padding:14px 0; border-bottom:1px solid var(--border-light);
+}
+.dt-info-row:last-child { border-bottom:none; }
+.dt-info-icon {
+  width:40px; height:40px; border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px; flex-shrink:0;
+}
+.dt-header.dawn + .dt-body .dt-info-icon { background:#F0F4FF; }
+.dt-header.quick + .dt-body .dt-info-icon { background:var(--primary-50); }
+.dt-info-text h5 { font-size:14px; font-weight:700; margin-bottom:2px; }
+.dt-info-text p { font-size:12.5px; color:var(--text-tertiary); line-height:1.5; }
+
+/* ===== PROCESS FLOW ===== */
+.process-flow {
+  display:grid; grid-template-columns:repeat(5,1fr);
+  gap:16px; position:relative;
+}
+.process-flow::before {
+  content:''; position:absolute; top:42px; left:10%; right:10%;
+  height:2px;
+  background:linear-gradient(90deg,var(--primary-100),var(--primary),var(--primary-100));
+}
+.pf-step { text-align:center; position:relative; z-index:1; }
+.pf-number {
+  width:48px; height:48px; border-radius:50%;
+  background:var(--primary); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  margin:0 auto 16px;
+  font-family:var(--font-display); font-weight:800; font-size:16px;
+  box-shadow:0 4px 14px rgba(11,105,84,.2);
+  transition:var(--transition); position:relative;
+}
+.pf-number::after {
+  content:''; position:absolute; inset:-4px;
+  border-radius:50%; border:2px solid var(--primary-100);
+  opacity:0; transition:var(--transition);
+}
+.pf-step:hover .pf-number { transform:scale(1.1); }
+.pf-step:hover .pf-number::after { opacity:1; }
+.pf-icon { font-size:24px; margin-bottom:8px; }
+.pf-step h4 { font-size:14.5px; font-weight:800; margin-bottom:4px; letter-spacing:-.3px; }
+.pf-step p { font-size:12.5px; line-height:1.6; color:var(--text-secondary); }
+
+/* ===== SAFETY FEATURES ===== */
+.safety-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center;
+}
+.safety-visual {
+  position:relative; display:flex; justify-content:center;
+}
+.safety-img-wrap {
+  position:relative;
+}
+.safety-img-main {
+  width:280px; border-radius:28px;
+  box-shadow:var(--shadow-xl);
+}
+.safety-img-sub {
+  position:absolute; width:160px; border-radius:16px;
+  box-shadow:var(--shadow-lg); border:3px solid #fff;
+  bottom:-24px; right:-40px;
+  animation:float 4s ease-in-out 1s infinite;
+}
+
+.safety-list { display:flex; flex-direction:column; gap:8px; }
+.safety-item {
+  display:flex; gap:16px; align-items:flex-start;
+  padding:20px; border-radius:var(--radius-lg);
+  transition:var(--transition); border:1px solid transparent;
+}
+.safety-item:hover {
+  background:var(--surface); box-shadow:var(--shadow-sm);
+  border-color:var(--border);
+}
+.safety-item-icon {
+  width:44px; height:44px; border-radius:var(--radius-md);
+  background:var(--primary-50); display:flex; align-items:center;
+  justify-content:center; font-size:20px; flex-shrink:0;
+}
+.safety-item h4 { font-size:16px; font-weight:800; margin-bottom:4px; }
+.safety-item p { font-size:13.5px; line-height:1.75; color:var(--text-secondary); }
+
+/* ===== COMPARISON TABLE ===== */
+.compare-table-wrap {
+  background:var(--surface); border-radius:var(--radius-xl);
+  border:1px solid var(--border); overflow:hidden;
+}
+.compare-table {
+  width:100%; border-collapse:collapse;
+}
+.compare-table thead th {
+  padding:20px 24px; font-size:14px; font-weight:700;
+  text-align:left; background:var(--surface-alt);
+  border-bottom:2px solid var(--border);
+}
+.compare-table thead th:first-child { width:30%; }
+.compare-table thead th.highlight {
+  background:var(--primary); color:#fff; text-align:center;
+}
+.compare-table thead th:not(:first-child):not(.highlight) {
+  text-align:center; color:var(--text-secondary);
+}
+.compare-table tbody td {
+  padding:16px 24px; font-size:13.5px;
+  border-bottom:1px solid var(--border-light);
+  vertical-align:middle;
+}
+.compare-table tbody td:first-child {
+  font-weight:600; color:var(--text-primary);
+}
+.compare-table tbody td:not(:first-child) { text-align:center; }
+.compare-table tbody td.highlight {
+  background:var(--primary-50); font-weight:700; color:var(--primary);
+}
+.compare-table tbody tr:last-child td { border-bottom:none; }
+.check { color:var(--primary); font-weight:800; font-size:18px; }
+.cross { color:var(--text-tertiary); font-size:18px; }
+
+/* ===== VIDEO SECTION ===== */
+.video-section { padding:100px 0; }
+.video-wrap {
+  max-width:900px; margin:0 auto;
+  border-radius:var(--radius-xl); overflow:hidden;
+  box-shadow:var(--shadow-xl); position:relative;
+  background:#000; aspect-ratio:16/9;
+}
+.video-wrap video {
+  width:100%; height:100%; object-fit:cover; display:block;
+}
+
+/* ===== APP DOWNLOAD BANNER ===== */
+.app-banner {
+  padding:80px 0;
+  background:linear-gradient(160deg, #053D32 0%, #0B6954 50%, #0E8C6F 100%);
+  position:relative; overflow:hidden;
+}
+.app-banner::before {
+  content:''; position:absolute; top:-80px; left:50%; transform:translateX(-50%);
+  width:800px; height:400px;
+  background:radial-gradient(ellipse,rgba(255,255,255,.04) 0%,transparent 70%);
+}
+.app-banner-inner {
+  max-width:700px; margin:0 auto; text-align:center;
+  position:relative; z-index:1;
+}
+.app-banner-inner h2 {
+  font-family:var(--font-display);
+  font-size:34px; font-weight:900; letter-spacing:-1.5px;
+  color:#fff; line-height:1.3; margin-bottom:14px;
+}
+.app-banner-inner h2 em {
+  font-style:normal;
+  background:linear-gradient(135deg,#5BE8C8,#A0F0D4);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.app-banner-inner > p {
+  font-size:15px; color:rgba(255,255,255,.5); line-height:1.8;
+  margin-bottom:32px;
+}
+.app-banner-btns {
+  display:flex; gap:12px; justify-content:center; flex-wrap:wrap;
+}
+.btn-white {
+  display:inline-flex; align-items:center; gap:8px;
+  background:#fff; color:var(--primary);
+  padding:14px 32px; border-radius:var(--radius-full);
+  font-weight:700; font-size:15px;
+  transition:var(--transition);
+  box-shadow:0 4px 20px rgba(0,0,0,.1);
+}
+.btn-white:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(0,0,0,.15); }
+.btn-outline-white {
+  display:inline-flex; align-items:center; gap:8px;
+  background:transparent; color:#fff;
+  padding:14px 32px; border-radius:var(--radius-full);
+  font-weight:600; font-size:15px;
+  border:1.5px solid rgba(255,255,255,.2);
+  transition:var(--transition);
+}
+.btn-outline-white:hover {
+  border-color:rgba(255,255,255,.45);
+  background:rgba(255,255,255,.06);
+  transform:translateY(-2px);
+}
+.app-links {
+  display:flex; gap:10px; justify-content:center; margin-top:20px; flex-wrap:wrap;
+}
+.app-link {
+  display:flex; align-items:center; gap:7px;
+  background:rgba(255,255,255,.07); backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.1);
+  padding:9px 18px; border-radius:var(--radius-md);
+  font-size:13px; font-weight:600; color:rgba(255,255,255,.8);
+  transition:var(--transition);
+}
+.app-link:hover {
+  border-color:rgba(255,255,255,.25); background:rgba(255,255,255,.12);
+  transform:translateY(-1px);
+}
+
+/* ===== FAQ ===== */
+.faq-list { max-width:740px; margin:0 auto; }
+.faq-item {
+  border-bottom:1px solid var(--border);
+  overflow:hidden;
+}
+.faq-question {
+  display:flex; align-items:center; justify-content:space-between;
+  width:100%; padding:22px 0; font-size:15.5px; font-weight:700;
+  color:var(--text-primary); text-align:left;
+  transition:var(--transition); gap:16px;
+}
+.faq-question:hover { color:var(--primary); }
+.faq-arrow {
+  width:28px; height:28px; border-radius:50%;
+  background:var(--surface-alt); display:flex; align-items:center;
+  justify-content:center; flex-shrink:0; transition:var(--transition);
+}
+.faq-item.open .faq-arrow { transform:rotate(180deg); background:var(--primary-50); }
+.faq-answer {
+  max-height:0; overflow:hidden;
+  transition:max-height .35s cubic-bezier(.4,0,.2,1);
+}
+.faq-answer-inner {
+  padding:0 0 22px;
+  font-size:14px; line-height:1.8; color:var(--text-secondary);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  padding:64px 0 36px; background:#0F1419;
+  color:rgba(255,255,255,.45);
+}
+.footer-grid {
+  display:grid; grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:36px; margin-bottom:40px; padding-bottom:40px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.footer-brand-logo {
+  font-family:var(--font-display); font-weight:800;
+  font-size:20px; color:#fff; margin-bottom:12px;
+}
+.footer-brand-logo span { color:var(--accent); }
+.footer-brand p { font-size:13px; line-height:1.75; max-width:280px; }
+.footer-col h5 {
+  color:rgba(255,255,255,.75); font-size:12px; font-weight:700;
+  margin-bottom:16px; letter-spacing:.5px; text-transform:uppercase;
+}
+.footer-col a {
+  display:block; font-size:13px; margin-bottom:10px;
+  color:rgba(255,255,255,.4); transition:var(--transition);
+}
+.footer-col a:hover { color:rgba(255,255,255,.8); }
+.footer-bottom {
+  display:flex; justify-content:space-between; align-items:center;
+  flex-wrap:wrap; gap:16px;
+}
+.footer-bottom p { font-size:11.5px; line-height:1.9; }
+.footer-social { display:flex; gap:8px; }
+.footer-social a {
+  width:34px; height:34px; border-radius:50%;
+  background:rgba(255,255,255,.06);
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px; transition:var(--transition);
+  color:rgba(255,255,255,.4);
+}
+.footer-social a:hover {
+  background:rgba(255,255,255,.12); color:#fff;
+  transform:translateY(-2px);
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px) {
+  .page-hero-grid { grid-template-columns:1fr; text-align:center; gap:40px; }
+  .page-hero-desc { margin:0 auto 32px; }
+  .page-hero-btns { justify-content:center; }
+  .page-hero-breadcrumb { justify-content:center; }
+  .page-hero-visual { order:-1; }
+  .key-features { grid-template-columns:repeat(2,1fr); }
+  .delivery-types { grid-template-columns:1fr 1fr; }
+  .process-flow { grid-template-columns:repeat(3,1fr); }
+  .process-flow::before { display:none; }
+  .safety-grid { grid-template-columns:1fr; gap:48px; }
+  .safety-visual { order:-1; }
+  .compare-table-wrap { overflow-x:auto; }
+  .footer-grid { grid-template-columns:1fr 1fr; }
+}
+@media(max-width:768px) {
+  .nav-menu, .nav-actions { display:none; }
+  .nav-toggle { display:flex; }
+  .mobile-menu { display:block; }
+  .page-hero { padding:110px 0 60px; }
+  .page-hero h1 { font-size:30px; letter-spacing:-1px; }
+  .hero-app-img { width:240px; }
+  .hero-splash-badge { display:none; }
+  .section { padding:72px 0; }
+  .section-header h2 { font-size:27px; letter-spacing:-1px; }
+  .key-features { grid-template-columns:1fr; }
+  .delivery-types { grid-template-columns:1fr; }
+  .process-flow { grid-template-columns:1fr 1fr; gap:20px; }
+  .safety-img-main { width:220px; }
+  .safety-img-sub { display:none; }
+  .app-banner { padding:60px 0; }
+  .app-banner-inner h2 { font-size:27px; }
+  .footer-grid { grid-template-columns:1fr; }
+}
+@media(max-width:480px) {
+  .page-hero h1 { font-size:26px; }
+  .btn-primary, .btn-secondary, .btn-white { padding:12px 26px; font-size:14px; }
+  .page-hero-btns, .app-banner-btns { flex-direction:column; align-items:center; }
+  .process-flow { grid-template-columns:1fr; }
+  .hero-app-img { width:200px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="nav" id="navbar">
+  <div class="container nav-inner">
+    <a href="index.html" class="nav-logo">DENDEAL<span>.</span></a>
+    <div class="nav-menu">
+      <a href="index.html#services">서비스</a>
+      <a href="index.html#platform">플랫폼</a>
+      <a href="index.html#process">이용방법</a>
+      <a href="index.html#reviews">고객후기</a>
+    </div>
+    <div class="nav-actions">
+      <a href="https://dendeal.kr" class="nav-login">로그인</a>
+      <a href="https://dendeal.kr" class="nav-cta-btn">무료 시작하기</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기">
+      <span class="nav-toggle-bar"></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html#services">서비스</a>
+  <a href="index.html#platform">플랫폼</a>
+  <a href="index.html#process">이용방법</a>
+  <a href="index.html#reviews">고객후기</a>
+  <a href="https://dendeal.kr" class="mobile-cta">무료 시작하기</a>
+</div>
+
+<!-- ===== PAGE HERO ===== -->
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero-grid">
+      <div class="page-hero-content">
+        <div class="page-hero-breadcrumb">
+          <a href="index.html">홈</a>
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+          <span>서비스</span>
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+          <span style="color:rgba(255,255,255,.8)">기공물 배송</span>
+        </div>
+        <div class="page-hero-badge">One-Stop Delivery Service</div>
+        <h1>수거부터 배송까지,<br><em>원스톱 배송</em> 서비스</h1>
+        <p class="page-hero-desc">치아의 위생과 보존 상태를 우선하는 치아배송 전문 플랫폼. 새벽배송과 퀵배송으로 치과 기공물을 안전하고 빠르게 전달합니다.</p>
+        <div class="page-hero-btns">
+          <a href="https://dendeal.kr" class="btn-primary">
+            배송 서비스 시작하기
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="tel:031-360-0415" class="btn-secondary">상담 문의 031-360-0415</a>
+        </div>
+      </div>
+      <div class="page-hero-visual">
+        <img src="안드로이드-스크린샷아트보드-3.png" alt="덴딜 앱 배송현황 화면" class="hero-app-img">
+        <img src="스플래시-스크린아트보드-ver1.png" alt="덴딜 로고" class="hero-splash-badge tl">
+        <img src="스플래시-스크린아트보드-ver2.png" alt="덴딜 한글 로고" class="hero-splash-badge br">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VIDEO ===== -->
+<section class="video-section section-alt" id="video">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">PROMOTION VIDEO</div>
+      <h2>덴딜 배송 서비스를<br><em>영상</em>으로 만나보세요</h2>
+      <p>수거부터 납품까지, 덴딜이 어떻게 기공물을 안전하게 전달하는지 확인하세요.</p>
+    </div>
+    <div class="video-wrap reveal">
+      <video id="promoVideo" preload="auto" playsinline autoplay muted loop>
+        <source src="덴딜홍보영상.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+</section>
+
+<!-- ===== KEY FEATURES ===== -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">KEY FEATURES</div>
+      <h2>차원이 다른<br><em>덴딜 배송</em> 서비스</h2>
+      <p>치과기공 플랫폼 서비스에 혁신을 더합니다. 기공물의 안전과 신속을 최우선으로 합니다.</p>
+    </div>
+    <div class="key-features">
+      <div class="key-feature reveal reveal-delay-1">
+        <div class="kf-icon green">🏥</div>
+        <h3>치과전용 보관함 설치</h3>
+        <p>새벽배송 시 치과에 전용 보관함을 설치하여 기공물을 안전하게 보관·관리합니다.</p>
+      </div>
+      <div class="key-feature reveal reveal-delay-2">
+        <div class="kf-icon orange">📱</div>
+        <h3>앱 원클릭 접수</h3>
+        <p>전화 없이 앱에서 원클릭으로 배송 접수. 현재 현황과 지난 내역을 한눈에 파악할 수 있습니다.</p>
+      </div>
+      <div class="key-feature reveal reveal-delay-3">
+        <div class="kf-icon blue">🕐</div>
+        <h3>새벽·퀵 배송</h3>
+        <p>진료 시작 전 새벽 배송, 급한 건은 퀵 배송으로. 시간에 맞춘 유연한 배송 체계를 운영합니다.</p>
+      </div>
+      <div class="key-feature reveal reveal-delay-4">
+        <div class="kf-icon purple">🔄</div>
+        <h3>수거·납품 원스톱</h3>
+        <p>기공소 수거부터 치과 납품까지 한 번에 처리. 별도 연락 없이 앱으로 간편하게 접수합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DELIVERY TYPES ===== -->
+<section class="section section-alt" id="types">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">DELIVERY TYPES</div>
+      <h2>이제 치아 배송도<br><em>새벽배송</em>으로</h2>
+      <p>상황에 맞는 최적의 배송 방식을 선택하세요. 긴급 건부터 정기 배송까지 모두 지원합니다.</p>
+    </div>
+    <div class="delivery-types">
+      <div class="delivery-type reveal reveal-delay-1">
+        <div class="dt-header dawn">
+          <div class="dt-badge">🌙 DAWN DELIVERY</div>
+          <h3>새벽 배송</h3>
+          <p>밤 사이 수거하여 진료 시작 전까지 치과에 납품 완료</p>
+        </div>
+        <div class="dt-body">
+          <div class="dt-info-row">
+            <div class="dt-info-icon">⏰</div>
+            <div class="dt-info-text">
+              <h5>배송 시간</h5>
+              <p>오후 수거 → 익일 오전 7시 이전 납품</p>
+            </div>
+          </div>
+          <div class="dt-info-row">
+            <div class="dt-info-icon">📱</div>
+            <div class="dt-info-text">
+              <h5>접수 방법</h5>
+              <p>덴딜 앱 원클릭 접수 → 자동 배차</p>
+            </div>
+          </div>
+          <div class="dt-info-row">
+            <div class="dt-info-icon">🔒</div>
+            <div class="dt-info-text">
+              <h5>치과전용 보관함</h5>
+              <p>치과에 전용 보관함 설치, 안전한 보관·수령</p>
+            </div>
+          </div>
+          <div class="dt-info-row">
+            <div class="dt-info-icon">✅</div>
+            <div class="dt-info-text">
+              <h5>추천 대상</h5>
+              <p>정기적인 기공물 수발주, 계획된 납품 일정</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="delivery-type reveal reveal-delay-2">
+        <div class="dt-header quick">
+          <div class="dt-badge">⚡ QUICK DELIVERY</div>
+          <h3>퀵 배송</h3>
+          <p>긴급 기공물을 가장 빠르게. 접수 후 즉시 수거·배송 시작</p>
+        </div>
+        <div class="dt-body">
+          <div class="dt-info-row">
+            <div class="dt-info-icon">⏰</div>
+            <div class="dt-info-text">
+              <h5>배송 시간</h5>
+              <p>접수 즉시 수거 → 최단 시간 내 납품</p>
+            </div>
+          </div>
+          <div class="dt-info-row">
+            <div class="dt-info-icon">📱</div>
+            <div class="dt-info-text">
+              <h5>접수 방법</h5>
+              <p>앱 원클릭 접수 → 가장 가까운 라이더 즉시 배차</p>
+            </div>
+          </div>
+          <div class="dt-info-row">
+            <div class="dt-info-icon">✅</div>
+            <div class="dt-info-text">
+              <h5>추천 대상</h5>
+              <p>긴급 수정 기공물, 당일 진료용 보철물</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DELIVERY PROCESS ===== -->
+<section class="section" id="process">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">PROCESS</div>
+      <h2>수거부터 배송까지<br><em>5단계</em> 원스톱 프로세스</h2>
+      <p>복잡한 과정 없이, 앱 하나로 수거부터 납품까지 완벽하게 관리됩니다.</p>
+    </div>
+    <div class="process-flow">
+      <div class="pf-step reveal reveal-delay-1">
+        <div class="pf-number">1</div>
+        <div class="pf-icon">📱</div>
+        <h4>앱 원클릭 접수</h4>
+        <p>덴딜 앱에서<br>원클릭 배송 접수</p>
+      </div>
+      <div class="pf-step reveal reveal-delay-2">
+        <div class="pf-number">2</div>
+        <div class="pf-icon">🏍️</div>
+        <h4>수거 출발</h4>
+        <p>전담 라이더가<br>기공소 방문 수거</p>
+      </div>
+      <div class="pf-step reveal reveal-delay-3">
+        <div class="pf-number">3</div>
+        <div class="pf-icon">📦</div>
+        <h4>안전 포장</h4>
+        <p>전용 용기에<br>위생 포장 처리</p>
+      </div>
+      <div class="pf-step reveal reveal-delay-4">
+        <div class="pf-number">4</div>
+        <div class="pf-icon">🚛</div>
+        <h4>배송 진행</h4>
+        <p>실시간 추적과<br>상태 알림 제공</p>
+      </div>
+      <div class="pf-step reveal reveal-delay-5">
+        <div class="pf-number">5</div>
+        <div class="pf-icon">✅</div>
+        <h4>납품 완료</h4>
+        <p>치과 수령 확인<br>완료 알림 전송</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SAFETY ===== -->
+<section class="section section-alt" id="safety">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">SAFETY FIRST</div>
+      <h2>치아의 <em>위생과 보존</em>을<br>최우선으로</h2>
+      <p>기공물의 특성에 맞춘 전문 배송 시스템으로 안전하게 전달합니다.</p>
+    </div>
+    <div class="safety-grid">
+      <div class="safety-visual reveal">
+        <div class="safety-img-wrap">
+          <img src="스플래시-스크린아트보드-ver3.png" alt="Den.deal 올인원 솔루션" class="safety-img-main">
+          <img src="스플래시-스크린아트보드-ver4.png" alt="덴딜 앱 아이콘" class="safety-img-sub">
+        </div>
+      </div>
+      <div>
+        <div class="safety-list">
+          <div class="safety-item reveal reveal-delay-1">
+            <div class="safety-item-icon">🔒</div>
+            <div>
+              <h4>치과전용 보관함 설치</h4>
+              <p>치과에 전용 보관함을 설치하여 새벽배송 시에도 기공물을 안전하게 보관·관리합니다.</p>
+            </div>
+          </div>
+          <div class="safety-item reveal reveal-delay-2">
+            <div class="safety-item-icon">📱</div>
+            <div>
+              <h4>앱 원클릭 배송 접수</h4>
+              <p>전화 접수 없이 앱에서 원클릭으로 배송 접수. 현재 현황과 지난 내역을 쉽게 파악할 수 있습니다.</p>
+            </div>
+          </div>
+          <div class="safety-item reveal reveal-delay-3">
+            <div class="safety-item-icon">🛡️</div>
+            <div>
+              <h4>파손 방지 안전 배송</h4>
+              <p>충격 흡수 소재와 개별 고정 시스템으로 배송 중 기공물의 파손을 철저히 방지합니다.</p>
+            </div>
+          </div>
+          <div class="safety-item reveal reveal-delay-4">
+            <div class="safety-item-icon">📊</div>
+            <div>
+              <h4>배송 현황·내역 관리</h4>
+              <p>실시간 배송 현황은 물론, 지난 배송 내역까지 앱에서 한눈에 확인하고 관리할 수 있습니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COMPARISON ===== -->
+<section class="section" id="compare">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">COMPARISON</div>
+      <h2>일반 배송 vs <em>덴딜 배송</em></h2>
+      <p>기공물 전문 배송이 왜 필요한지, 차이를 직접 비교해보세요.</p>
+    </div>
+    <div class="compare-table-wrap reveal">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>비교 항목</th>
+            <th>일반 택배</th>
+            <th class="highlight">덴딜 배송</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>전용 보관함</td>
+            <td><span class="cross">✕</span></td>
+            <td class="highlight"><span class="check">✓</span> 치과전용 보관함 설치</td>
+          </tr>
+          <tr>
+            <td>새벽 배송</td>
+            <td><span class="cross">✕</span></td>
+            <td class="highlight"><span class="check">✓</span> 오전 7시 이전 납품</td>
+          </tr>
+          <tr>
+            <td>실시간 추적</td>
+            <td>택배사 추적만 가능</td>
+            <td class="highlight"><span class="check">✓</span> 앱 실시간 GPS 추적</td>
+          </tr>
+          <tr>
+            <td>배송 접수 방식</td>
+            <td>전화 접수</td>
+            <td class="highlight"><span class="check">✓</span> 앱 원클릭 접수</td>
+          </tr>
+          <tr>
+            <td>수거 서비스</td>
+            <td>직접 포장·접수</td>
+            <td class="highlight"><span class="check">✓</span> 기공소 방문 수거</td>
+          </tr>
+          <tr>
+            <td>파손 보상</td>
+            <td>제한적</td>
+            <td class="highlight"><span class="check">✓</span> 전액 보상 제도</td>
+          </tr>
+          <tr>
+            <td>배송 소요 시간</td>
+            <td>1~3일</td>
+            <td class="highlight"><span class="check">✓</span> 당일·익일 새벽</td>
+          </tr>
+          <tr>
+            <td>전문 기사</td>
+            <td><span class="cross">✕</span></td>
+            <td class="highlight"><span class="check">✓</span> 기공물 전문 교육 이수</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="section section-alt" id="faq">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">FAQ</div>
+      <h2>자주 묻는 <em>질문</em></h2>
+      <p>배송 서비스에 대해 궁금한 점을 확인해보세요.</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          배송 가능한 지역은 어디인가요?
+          <div class="faq-arrow"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">현재 수도권(서울, 경기, 인천) 전역에서 새벽배송과 퀵배송 서비스를 운영하고 있습니다. 서비스 지역은 지속적으로 확대 중이며, 자세한 내용은 고객센터(031-360-0415)로 문의해주세요.</div>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          새벽배송 접수 마감 시간은 언제인가요?
+          <div class="faq-arrow"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">오후 수거 접수 건에 한해 익일 오전 7시 이전 납품을 진행합니다. 정확한 마감 시간은 지역에 따라 다를 수 있으니 앱에서 확인하시거나 고객센터로 문의해주세요.</div>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          배송 중 기공물이 파손되면 어떻게 하나요?
+          <div class="faq-arrow"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">덴딜 배송 중 발생한 파손에 대해서는 전액 보상 제도를 운영하고 있습니다. 수거·납품 시 촬영한 사진 기록을 바탕으로 신속하게 보상 처리해드립니다.</div>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          배송 요금은 얼마인가요?
+          <div class="faq-arrow"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">배송 요금은 배송 유형(새벽배송/퀵배송), 거리, 물량에 따라 달라집니다. 정기 계약 시 할인 혜택이 적용되며, 자세한 요금은 덴딜 앱에서 확인하시거나 제휴 문의를 통해 상담받으실 수 있습니다.</div>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          개인 치과에서도 이용할 수 있나요?
+          <div class="faq-arrow"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">네, 개인 치과의원부터 대형 치과병원, 기공소까지 모두 이용 가능합니다. 무료 가입 후 바로 배송 서비스를 이용하실 수 있습니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== APP DOWNLOAD CTA ===== -->
+<section class="app-banner">
+  <div class="container">
+    <div class="app-banner-inner">
+      <h2>치과기공물 배송,<br><em>덴딜 앱</em>으로 간편하게</h2>
+      <p>앱 하나로 수거 접수, 실시간 추적, 납품 확인까지.<br>지금 다운로드하고 편리한 배송을 경험하세요.</p>
+      <div class="app-banner-btns">
+        <a href="https://dendeal.kr" class="btn-white">
+          무료로 시작하기
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="tel:031-360-0415" class="btn-outline-white">📞 문의 031-360-0415</a>
+      </div>
+      <div class="app-links">
+        <a href="https://apps.apple.com/kr/app/%EB%8D%B4%EB%94%9C/id6748289992" class="app-link">🍎 App Store</a>
+        <a href="https://play.google.com/store/apps/details?id=com.dendeal.v2.dendeal" class="app-link">▶️ Google Play</a>
+        <a href="https://dendeal.kr" class="app-link">🖥️ PC 버전</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-brand-logo">DENDEAL<span>.</span></div>
+        <p>기공물 배송, 치과재료, 임플란트까지. 주문과 경영을 하나로 잇는 치과 전문 디지털 플랫폼.</p>
+      </div>
+      <div class="footer-col">
+        <h5>서비스</h5>
+        <a href="delivery.html">기공물 배송</a>
+        <a href="manufacturing.html">제조 중개</a>
+        <a href="#">덴딜몰</a>
+        <a href="#">덴딜 임플란트</a>
+      </div>
+      <div class="footer-col">
+        <h5>지원</h5>
+        <a href="#">이용 가이드</a>
+        <a href="#">자주 묻는 질문</a>
+        <a href="tel:031-360-0415">고객센터</a>
+        <a href="mailto:kswmiso@naver.com">이메일 문의</a>
+      </div>
+      <div class="footer-col">
+        <h5>회사</h5>
+        <a href="#">회사 소개</a>
+        <a href="#">공지사항</a>
+        <a href="#">이용약관</a>
+        <a href="#">개인정보처리방침</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>
+        (주) 덴탈서비스 | 대표: 김상우 | 사업자등록번호: 544-81-00552<br>
+        경기도 안양시 동안구 엘에스로 136, 금정2차SKV1센터 지하 B111호 | 031-360-0415<br>
+        Copyright &copy; 2025 DENDEAL. All Rights Reserved.
+      </p>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/den.deal/" title="Instagram" aria-label="Instagram">📷</a>
+        <a href="https://pf.kakao.com/_SSxoxcxb" title="카카오톡" aria-label="카카오톡 채널">💬</a>
+        <a href="https://blog.naver.com/dendeil" title="블로그" aria-label="네이버 블로그">📝</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== SCRIPTS ===== -->
+<script>
+// Nav scroll
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 20);
+}, { passive: true });
+
+// Mobile menu
+const navToggle = document.getElementById('navToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+navToggle.addEventListener('click', () => {
+  navToggle.classList.toggle('active');
+  mobileMenu.classList.toggle('open');
+  document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+});
+mobileMenu.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    navToggle.classList.remove('active');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
+
+// Reveal on scroll
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// FAQ accordion
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    const answer = item.querySelector('.faq-answer');
+    const isOpen = item.classList.contains('open');
+
+    // Close all
+    document.querySelectorAll('.faq-item').forEach(fi => {
+      fi.classList.remove('open');
+      fi.querySelector('.faq-answer').style.maxHeight = null;
+    });
+
+    // Open clicked
+    if (!isOpen) {
+      item.classList.add('open');
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+    }
+  });
+});
+</script>
+</body>
+</html>

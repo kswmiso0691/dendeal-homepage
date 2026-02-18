@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>덴딜 임플란트 - 치과 임플란트 주문 시스템 | DENDEAL</title>
+<meta name="description" content="덴딜 임플란트 - 원클릭 주문, 즐겨찾기, 주문통계까지. 임플란트 구매의 모든 것을 하나의 시스템으로. 최대 85% 할인.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #0B6954;
+  --primary-light: #0E8C6F;
+  --primary-dark: #084D3E;
+  --primary-50: #ECFDF5;
+  --primary-100: #D1FAE5;
+  --accent: #F97316;
+  --accent-hover: #EA580C;
+  --imp: #2563EB;
+  --imp-dark: #1D4ED8;
+  --imp-50: #EFF6FF;
+  --imp-100: #DBEAFE;
+  --surface: #FFFFFF;
+  --surface-alt: #F8FAFC;
+  --text-primary: #111827;
+  --text-secondary: #4B5563;
+  --text-tertiary: #9CA3AF;
+  --border: #E5E7EB;
+  --border-light: #F3F4F6;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.07);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,.1);
+  --shadow-xl: 0 24px 60px rgba(0,0,0,.12);
+  --transition: .3s cubic-bezier(.4,0,.2,1);
+  --font-display: 'Inter','Noto Sans KR',sans-serif;
+  --font-body: 'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--surface);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.6;word-break:keep-all}
+a{text-decoration:none;color:inherit}
+button{border:none;background:none;cursor:pointer;font:inherit}
+img{max-width:100%;display:block}
+.container{max-width:1140px;margin:0 auto;padding:0 24px}
+
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.3}}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+.reveal-delay-4{transition-delay:.4s}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid transparent;transition:var(--transition)}
+.nav.scrolled{background:rgba(255,255,255,.95);border-bottom-color:var(--border);box-shadow:0 1px 12px rgba(0,0,0,.04)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{font-family:var(--font-display);font-weight:900;font-size:22px;color:var(--primary);letter-spacing:-.5px}
+.nav-logo span{color:var(--accent)}
+.nav-menu{display:flex;align-items:center;gap:32px}
+.nav-menu > a, .nav-dropdown > .nav-dropdown-trigger {
+  font-size:15.5px; font-weight:500; color:var(--text-secondary);
+  transition:var(--transition); position:relative; padding:4px 0;
+  cursor:pointer;
+}
+.nav-menu > a::after, .nav-dropdown > .nav-dropdown-trigger::after {
+  content:''; position:absolute; bottom:-2px; left:0; right:0;
+  height:2px; background:var(--primary); border-radius:2px;
+  transform:scaleX(0); transition:var(--transition);
+}
+.nav-menu > a:hover { color:var(--primary); }
+.nav-menu > a:hover::after { transform:scaleX(1); }
+.nav-dropdown { position:relative; }
+.nav-dropdown > .nav-dropdown-trigger { display:flex; align-items:center; gap:4px; }
+.nav-dropdown > .nav-dropdown-trigger svg { width:12px; height:12px; transition:transform .25s; }
+.nav-dropdown:hover > .nav-dropdown-trigger { color:var(--primary); }
+.nav-dropdown:hover > .nav-dropdown-trigger::after { transform:scaleX(1); }
+.nav-dropdown:hover > .nav-dropdown-trigger svg { transform:rotate(180deg); }
+.nav-dropdown-menu {
+  position:absolute; top:calc(100% + 12px); left:50%; transform:translateX(-50%);
+  min-width:220px; background:#fff; border-radius:var(--radius-md);
+  box-shadow:0 12px 40px rgba(0,0,0,.12); border:1px solid var(--border-light);
+  padding:8px; opacity:0; visibility:hidden;
+  transition:opacity .2s, visibility .2s, transform .2s;
+  transform:translateX(-50%) translateY(6px); z-index:110;
+}
+.nav-dropdown-menu::before {
+  content:''; position:absolute; top:-8px; left:50%; transform:translateX(-50%);
+  width:14px; height:14px; background:#fff; border:1px solid var(--border-light);
+  border-bottom:none; border-right:none;
+  transform:translateX(-50%) rotate(45deg);
+}
+.nav-dropdown:hover > .nav-dropdown-menu {
+  opacity:1; visibility:visible; transform:translateX(-50%) translateY(0);
+}
+.nav-dropdown-menu a {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 14px; border-radius:var(--radius-sm);
+  font-size:14.5px; font-weight:500; color:var(--text-secondary);
+  transition:var(--transition); white-space:nowrap;
+}
+.nav-dropdown-menu a::after { display:none; }
+.nav-dropdown-menu a:hover {
+  background:var(--primary-50); color:var(--primary);
+}
+.nav-dropdown-menu a span.dd-icon {
+  width:30px; height:30px; border-radius:var(--radius-sm);
+  display:flex; align-items:center; justify-content:center;
+  font-size:15px; flex-shrink:0; background:var(--surface-alt);
+}
+.nav-dropdown-menu a:hover span.dd-icon { background:var(--primary-100); }
+.mobile-menu .mobile-sub { padding-left:20px; }
+.mobile-menu .mobile-sub a { font-size:15px; font-weight:500; color:var(--text-secondary); padding:12px 0; }
+.nav-actions{display:flex;align-items:center;gap:8px}
+.nav-login{font-size:15.5px;font-weight:500;color:var(--text-secondary);padding:8px 16px;border-radius:var(--radius-full);transition:var(--transition)}
+.nav-login:hover{color:var(--imp);background:var(--imp-50)}
+.nav-cta-btn{font-size:14px;font-weight:700;color:#fff;background:var(--primary);padding:9px 22px;border-radius:var(--radius-full);transition:var(--transition)}
+.nav-cta-btn:hover{background:var(--primary-light);box-shadow:0 4px 14px rgba(11,105,84,.25);transform:translateY(-1px)}
+.nav-toggle{display:none;width:40px;height:40px;align-items:center;justify-content:center;border-radius:var(--radius-sm)}
+.nav-toggle-bar{width:20px;height:2px;background:var(--text-primary);position:relative;transition:var(--transition)}
+.nav-toggle-bar::before,.nav-toggle-bar::after{content:'';position:absolute;left:0;width:100%;height:2px;background:var(--text-primary);transition:var(--transition)}
+.nav-toggle-bar::before{top:-6px}.nav-toggle-bar::after{top:6px}
+.nav-toggle.active .nav-toggle-bar{background:transparent}
+.nav-toggle.active .nav-toggle-bar::before{top:0;transform:rotate(45deg)}
+.nav-toggle.active .nav-toggle-bar::after{top:0;transform:rotate(-45deg)}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;bottom:0;background:rgba(255,255,255,.98);backdrop-filter:blur(20px);z-index:99;padding:24px;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1)}
+.mobile-menu.open{transform:translateX(0)}
+.mobile-menu a{display:block;padding:16px 0;font-size:17px;font-weight:600;color:var(--text-primary);border-bottom:1px solid var(--border-light);transition:var(--transition)}
+.mobile-menu a:hover{color:var(--imp)}
+.mobile-menu .mobile-cta{display:block;text-align:center;margin-top:24px;background:var(--primary);color:#fff;padding:14px;border-radius:var(--radius-md);font-weight:700;font-size:15px;border-bottom:none}
+
+/* HERO */
+.page-hero{padding:140px 0 80px;background:linear-gradient(135deg,#1E3A8A 0%,#2563EB 50%,#3B82F6 100%);position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;top:-40%;right:-15%;width:700px;height:700px;background:radial-gradient(circle,rgba(255,255,255,.04) 0%,transparent 70%);border-radius:50%}
+.page-hero::after{content:'';position:absolute;bottom:-20%;left:-8%;width:500px;height:500px;background:radial-gradient(circle,rgba(16,185,129,.06) 0%,transparent 70%);border-radius:50%}
+.page-hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;z-index:1}
+.page-hero-content{animation:fadeUp .7s ease both}
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:15px;color:rgba(255,255,255,.45);margin-bottom:24px}
+.breadcrumb a{color:rgba(255,255,255,.45);transition:var(--transition)}
+.breadcrumb a:hover{color:rgba(255,255,255,.8)}
+.breadcrumb svg{width:14px;height:14px;opacity:.5}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(8px);padding:7px 16px;border-radius:var(--radius-full);font-size:14px;font-weight:600;color:rgba(255,255,255,.8);margin-bottom:24px;letter-spacing:.5px}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:#10B981;animation:pulse-dot 2s infinite}
+.page-hero h1{font-family:var(--font-display);font-size:44px;font-weight:900;line-height:1.2;color:#fff;letter-spacing:-2px;margin-bottom:20px}
+.page-hero h1 em{font-style:normal;background:linear-gradient(135deg,#93C5FD,#BFDBFE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-desc{font-size:16px;line-height:1.85;color:rgba(255,255,255,.55);max-width:460px;margin-bottom:32px}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;padding:14px 32px;border-radius:var(--radius-full);font-weight:700;font-size:15px;transition:var(--transition);box-shadow:0 4px 20px rgba(249,115,22,.3)}
+.btn-primary:hover{background:var(--accent-hover);transform:translateY(-2px);box-shadow:0 8px 28px rgba(249,115,22,.4)}
+.btn-secondary{display:inline-flex;align-items:center;gap:8px;background:transparent;color:rgba(255,255,255,.8);padding:14px 32px;border-radius:var(--radius-full);font-weight:600;font-size:15px;border:1.5px solid rgba(255,255,255,.18);transition:var(--transition)}
+.btn-secondary:hover{border-color:rgba(255,255,255,.45);color:#fff;background:rgba(255,255,255,.05);transform:translateY(-2px)}
+
+/* Hero Product Image */
+.hero-visual{animation:fadeUp .8s ease .2s both;display:flex;justify-content:center;position:relative}
+.hero-product-img{max-width:420px;width:100%;border-radius:var(--radius-xl);animation:float 6s ease-in-out infinite}
+
+/* SECTION */
+.section{padding:100px 0}
+.section-alt{background:var(--surface-alt)}
+.section-dark{background:#0F172A;color:#fff}
+.section-header{text-align:center;margin-bottom:56px}
+.section-tag{display:inline-flex;align-items:center;gap:5px;background:var(--imp-50);color:var(--imp);padding:6px 14px;border-radius:var(--radius-full);font-size:13px;font-weight:700;letter-spacing:.8px;margin-bottom:16px;text-transform:uppercase}
+.section-tag.green{background:var(--primary-50);color:var(--primary)}
+.section-tag.dark{background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)}
+.section-header h2{font-family:var(--font-display);font-size:36px;font-weight:900;letter-spacing:-1.5px;line-height:1.3;margin-bottom:14px}
+.section-header h2 em{font-style:normal;color:var(--imp)}
+.section-header p{font-size:17px;color:var(--text-secondary);line-height:1.75;max-width:520px;margin:0 auto}
+
+/* STATS */
+.stats-highlight{padding:72px 0;background:linear-gradient(135deg,#1E3A8A,#2563EB,#3B82F6);position:relative;overflow:hidden}
+.stats-hl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;text-align:center;position:relative;z-index:1}
+.stat-hl{padding:12px 0}
+.stat-hl-num{font-family:var(--font-display);font-size:52px;font-weight:900;color:#fff;letter-spacing:-2px;display:block;margin-bottom:8px}
+.stat-hl-num span{font-size:28px;font-weight:700}
+.stat-hl-label{font-size:17px;font-weight:600;color:rgba(255,255,255,.6);letter-spacing:.3px}
+.stat-hl-sub{font-size:14px;font-weight:500;color:rgba(255,255,255,.35);margin-top:4px}
+
+/* PAIN POINTS */
+.pain-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.pain-card{background:var(--surface);border-radius:var(--radius-lg);padding:32px 24px;border:1px solid var(--border);transition:var(--transition);text-align:center;position:relative;overflow:hidden}
+.pain-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:transparent}
+.pain-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#EF4444,var(--accent));transform:scaleX(0);transform-origin:left;transition:var(--transition)}
+.pain-card:hover::after{transform:scaleX(1)}
+.pain-icon{font-size:36px;margin-bottom:16px}
+.pain-card h3{font-size:18px;font-weight:800;margin-bottom:8px}
+.pain-card p{font-size:15px;line-height:1.75;color:var(--text-secondary)}
+
+/* PRODUCTS */
+.products-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.product-img-wrap{border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-xl)}
+.product-img-wrap img{width:100%;display:block}
+.product-info h3{font-size:30px;font-weight:900;margin-bottom:12px;letter-spacing:-1px}
+.product-info .product-sub{font-size:17px;color:var(--text-secondary);line-height:1.8;margin-bottom:24px}
+.product-specs{display:flex;flex-direction:column;gap:10px}
+.spec-item{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface-alt);border-radius:var(--radius-md);border:1px solid var(--border-light)}
+.spec-item .spec-icon{font-size:20px;flex-shrink:0}
+.spec-item .spec-text{font-size:15.5px;font-weight:600;color:var(--text-primary)}
+.spec-item .spec-text b{color:var(--imp);font-weight:800}
+.product-price-box{margin-top:24px;display:flex;align-items:center;gap:16px;padding:20px 24px;background:linear-gradient(135deg,var(--imp-50),#F0F4FF);border-radius:var(--radius-lg);border:1px solid rgba(37,99,235,.1)}
+.price-original{font-size:16px;color:var(--text-tertiary);text-decoration:line-through}
+.price-discount{font-size:15.5px;font-weight:800;color:#EF4444;background:rgba(239,68,68,.08);padding:4px 10px;border-radius:var(--radius-full)}
+.price-final{font-size:28px;font-weight:900;color:var(--imp)}
+.price-final small{font-size:15.5px;font-weight:500}
+
+/* FEATURES with images */
+.feat-row{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-bottom:64px}
+.feat-row:nth-child(even){direction:rtl}
+.feat-row:nth-child(even)>*{direction:ltr}
+.feat-row:last-child{margin-bottom:0}
+.feat-img{border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-lg);border:1px solid var(--border)}
+.feat-img img{width:100%;display:block}
+.feat-content h3{font-size:26px;font-weight:900;margin-bottom:10px;letter-spacing:-.5px}
+.feat-content .feat-tag{display:inline-block;font-size:13px;font-weight:700;color:var(--imp);background:var(--imp-50);padding:4px 12px;border-radius:var(--radius-full);margin-bottom:12px;letter-spacing:.5px}
+.feat-content p{font-size:16px;color:var(--text-secondary);line-height:1.8}
+
+/* TARGET */
+.target-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.target-card{background:var(--surface);border-radius:var(--radius-xl);padding:36px 24px;text-align:center;border:2px solid var(--border-light);transition:var(--transition)}
+.target-card:hover{border-color:var(--imp);box-shadow:0 12px 40px rgba(37,99,235,.1);transform:translateY(-6px)}
+.target-icon{width:64px;height:64px;background:var(--imp-50);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px;transition:var(--transition)}
+.target-card:hover .target-icon{background:var(--imp-100);transform:scale(1.08)}
+.target-num{font-size:13px;font-weight:700;color:var(--imp);margin-bottom:10px;letter-spacing:.5px}
+.target-card h4{font-size:17px;font-weight:700;line-height:1.55}
+
+/* FAQ */
+.faq-list{max-width:740px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--border);overflow:hidden}
+.faq-question{display:flex;align-items:center;justify-content:space-between;width:100%;padding:22px 0;font-size:17px;font-weight:700;color:var(--text-primary);text-align:left;transition:var(--transition);gap:16px}
+.faq-question:hover{color:var(--imp)}
+.faq-arrow{width:28px;height:28px;border-radius:50%;background:var(--surface-alt);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:var(--transition)}
+.faq-item.open .faq-arrow{transform:rotate(180deg);background:var(--imp-50)}
+.faq-answer{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1)}
+.faq-answer-inner{padding:0 0 22px;font-size:15.5px;line-height:1.8;color:var(--text-secondary)}
+
+/* CTA */
+.cta-banner{padding:80px 0;background:linear-gradient(135deg,#0F172A,#1E3A8A,#2563EB);position:relative;overflow:hidden}
+.cta-banner::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:800px;height:400px;background:radial-gradient(ellipse,rgba(255,255,255,.04) 0%,transparent 70%)}
+.cta-inner{max-width:700px;margin:0 auto;text-align:center;position:relative;z-index:1}
+.cta-inner h2{font-family:var(--font-display);font-size:34px;font-weight:900;letter-spacing:-1.5px;color:#fff;line-height:1.3;margin-bottom:14px}
+.cta-inner h2 em{font-style:normal;background:linear-gradient(135deg,#93C5FD,#BFDBFE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.cta-inner>p{font-size:17px;color:rgba(255,255,255,.5);line-height:1.8;margin-bottom:32px}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-white{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--imp);padding:14px 32px;border-radius:var(--radius-full);font-weight:700;font-size:15px;transition:var(--transition);box-shadow:0 4px 20px rgba(0,0,0,.1)}
+.btn-white:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.15)}
+.btn-outline-white{display:inline-flex;align-items:center;gap:8px;background:transparent;color:#fff;padding:14px 32px;border-radius:var(--radius-full);font-weight:600;font-size:15px;border:1.5px solid rgba(255,255,255,.2);transition:var(--transition)}
+.btn-outline-white:hover{border-color:rgba(255,255,255,.45);background:rgba(255,255,255,.06);transform:translateY(-2px)}
+
+/* FOOTER */
+.footer{padding:64px 0 36px;background:#0F1419;color:rgba(255,255,255,.45)}
+.footer-top {
+  display:flex; justify-content:space-between; align-items:flex-start;
+  flex-wrap:wrap; gap:36px; margin-bottom:40px; padding-bottom:40px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.footer-brand-logo {
+  font-family:var(--font-display); font-weight:800;
+  font-size:20px; color:#fff; margin-bottom:12px;
+}
+.footer-brand-logo span { color:var(--accent); }
+.footer-brand p { font-size:15px; line-height:1.75; max-width:340px; }
+.footer-brand-social { display:flex; gap:8px; margin-top:16px; }
+.footer-brand-social a {
+  width:34px; height:34px; border-radius:50%;
+  background:rgba(255,255,255,.06);
+  display:flex; align-items:center; justify-content:center;
+  font-size:15px; transition:var(--transition);
+  color:rgba(255,255,255,.4);
+}
+.footer-brand-social a:hover {
+  background:rgba(255,255,255,.12); color:#fff;
+  transform:translateY(-2px);
+}
+.footer-services {
+  display:flex; flex-wrap:wrap; gap:10px 16px;
+}
+.footer-services a {
+  font-size:14px; color:rgba(255,255,255,.4);
+  padding:6px 14px; border-radius:var(--radius-full);
+  border:1px solid rgba(255,255,255,.08);
+  transition:var(--transition); white-space:nowrap;
+}
+.footer-services a:hover {
+  color:#fff; border-color:rgba(255,255,255,.2);
+  background:rgba(255,255,255,.06);
+}
+.footer-bottom {
+  display:flex; justify-content:center; text-align:center;
+}
+.footer-bottom p { font-size:13px; line-height:1.9; }
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .page-hero-grid{grid-template-columns:1fr;text-align:center;gap:40px}
+  .hero-desc{margin:0 auto 32px}
+  .hero-btns,.breadcrumb{justify-content:center}
+  .hero-visual{order:-1}
+  .hero-product-img{max-width:320px}
+  .pain-grid{grid-template-columns:repeat(2,1fr)}
+  .products-grid{grid-template-columns:1fr;gap:32px}
+  .feat-row{grid-template-columns:1fr;gap:32px}
+  .feat-row:nth-child(even){direction:ltr}
+  .target-grid{grid-template-columns:repeat(2,1fr)}
+  .stats-hl-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-top { gap:28px; }
+}
+@media(max-width:768px){
+  .nav-menu,.nav-actions{display:none}
+  .nav-toggle{display:flex}
+  .mobile-menu{display:block}
+  .page-hero{padding:110px 0 60px}
+  .page-hero h1{font-size:30px;letter-spacing:-1px}
+  .hero-desc{font-size:15px}
+  .section{padding:72px 0}
+  .section-header h2{font-size:27px;letter-spacing:-1px}
+  .section-header p{max-width:none}
+  .pain-grid{grid-template-columns:1fr 1fr}
+  .target-grid{grid-template-columns:1fr 1fr}
+  .product-info h3{font-size:22px}
+  .feat-content h3{font-size:20px}
+  .stats-highlight{padding:48px 0}
+  .stat-hl-num{font-size:40px}
+  .stat-hl-label{font-size:15px}
+  .cta-banner{padding:60px 0}
+  .cta-inner h2{font-size:27px}
+  .footer-top{flex-direction:column;align-items:center;text-align:center}
+  .footer-brand-social{justify-content:center}
+  .footer-services{justify-content:center}
+}
+@media(max-width:480px){
+  .page-hero h1{font-size:26px}
+  .hero-desc{font-size:14px}
+  .section-tag{font-size:11px;padding:5px 12px}
+  .section-header p{font-size:15px}
+  .btn-primary,.btn-secondary,.btn-white,.btn-outline-white{padding:12px 26px;font-size:14px}
+  .hero-btns,.cta-btns{flex-direction:column;align-items:center}
+  .pain-grid{grid-template-columns:1fr}
+  .target-grid{grid-template-columns:1fr}
+  .price-final{font-size:22px}
+  .feat-content h3{font-size:18px}
+  .feat-content p{font-size:14px}
+  .cta-banner{padding:48px 0}
+  .cta-inner h2{font-size:24px}
+  .cta-inner>p{font-size:14px}
+  .footer-bottom p{font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="navbar">
+  <div class="container nav-inner">
+    <a href="index.html" class="nav-logo">DENDEAL<span>.</span></a>
+    <div class="nav-menu">
+      <div class="nav-dropdown">
+        <a href="index.html#services" class="nav-dropdown-trigger">서비스 <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></a>
+        <div class="nav-dropdown-menu">
+          <a href="delivery.html"><span class="dd-icon">🚚</span>기공물 배송</a>
+          <a href="manufacturing.html"><span class="dd-icon">🏭</span>제조 중개</a>
+          <a href="shop.html"><span class="dd-icon">🛒</span>덴딜몰</a>
+          <a href="implant.html"><span class="dd-icon">🔩</span>덴딜 임플란트</a>
+          <a href="management.html"><span class="dd-icon">📊</span>경영 관리</a>
+          <a href="dentalk.html"><span class="dd-icon">💬</span>덴톡 메신저</a>
+        </div>
+      </div>
+      <a href="about.html">회사소개</a>
+      <a href="index.html#process">이용방법</a>
+      <a href="index.html#contact">문의</a>
+    </div>
+    <div class="nav-actions">
+      <a href="https://dendeal.kr" class="nav-login">로그인</a>
+      <a href="https://dendeal.kr" class="nav-cta-btn">무료 시작하기</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기"><span class="nav-toggle-bar"></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html#services">서비스</a>
+  <div class="mobile-sub">
+    <a href="delivery.html">🚚 기공물 배송</a>
+    <a href="manufacturing.html">🏭 제조 중개</a>
+    <a href="shop.html">🛒 덴딜몰</a>
+    <a href="implant.html">🔩 덴딜 임플란트</a>
+    <a href="management.html">📊 경영 관리</a>
+    <a href="dentalk.html">💬 덴톡 메신저</a>
+  </div>
+  <a href="about.html">회사소개</a>
+  <a href="index.html#process">이용방법</a>
+  <a href="index.html#contact">문의</a>
+  <a href="https://dendeal.kr" class="mobile-cta">무료 시작하기</a>
+</div>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero-grid">
+      <div class="page-hero-content">
+        <div class="breadcrumb">
+          <a href="index.html">홈</a>
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+          <span>서비스</span>
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+          <span style="color:rgba(255,255,255,.8)">덴딜 임플란트</span>
+        </div>
+        <div class="hero-badge">Dental Implant Order System</div>
+        <h1>병원은 진료에 집중하세요<br><em>구매 관리는 간편하게</em></h1>
+        <p class="hero-desc">카톡, 전화 주문은 이제 그만. 원클릭 주문 · 즐겨찾기 · 주문통계까지 임플란트 구매의 모든 것을 하나의 시스템으로.</p>
+        <div class="hero-btns">
+          <a href="https://dendeal.kr" class="btn-primary">
+            덴딜 임플란트 시작하기
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="tel:031-360-0419" class="btn-secondary">📞 031-360-0419</a>
+          <a href="http://pf.kakao.com/_dMbgn/chat" class="btn-secondary" target="_blank">💬 카카오톡 문의</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="덴딜임플란트/AXEL 이미지1.PNG" alt="AXEL 임플란트 - Accelerate Confidence, With Every Placement" class="hero-product-img">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-highlight">
+  <div class="container">
+    <div class="stats-hl-grid">
+      <div class="stat-hl reveal">
+        <b class="stat-hl-num">85<span>%</span></b>
+        <small class="stat-hl-label">최대 할인율</small>
+      </div>
+      <div class="stat-hl reveal reveal-delay-1">
+        <b class="stat-hl-num">3,000<span>+</span></b>
+        <small class="stat-hl-label">임플란트 상품 수</small>
+      </div>
+      <div class="stat-hl reveal reveal-delay-2">
+        <b class="stat-hl-num" style="font-size:44px">호환</b>
+        <small class="stat-hl-label">오스템 · 네오 · 디오 · 덴티움</small>
+      </div>
+      <div class="stat-hl reveal reveal-delay-3">
+        <b class="stat-hl-num" style="font-size:44px">단품</b>
+        <small class="stat-hl-label">패키지 없이 단품 구매</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY: PAIN POINTS -->
+<section class="section" id="why">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">WHY?</div>
+      <h2>주문 시스템 없이<br><em>비효율적으로 구매</em>하고 있지 않으신가요?</h2>
+    </div>
+    <div class="pain-grid">
+      <div class="pain-card reveal reveal-delay-1">
+        <div class="pain-icon">📞</div>
+        <h3>카톡·전화 주문</h3>
+        <p>카톡이나 전화로 주문하느라 시간을 낭비하고 계신가요?</p>
+      </div>
+      <div class="pain-card reveal reveal-delay-2">
+        <div class="pain-icon">📦</div>
+        <h3>패키지 구매 부담</h3>
+        <p>패키지 구매의 부담, 단품으로 합리적으로 사고 싶지 않으신가요?</p>
+      </div>
+      <div class="pain-card reveal reveal-delay-3">
+        <div class="pain-icon">📊</div>
+        <h3>사용량 관리 어려움</h3>
+        <p>월별·연간 사용량을 자동으로 정리하고 싶지 않으신가요?</p>
+      </div>
+      <div class="pain-card reveal reveal-delay-4">
+        <div class="pain-icon">🔄</div>
+        <h3>인수인계 번거로움</h3>
+        <p>직원 교체 시 인수인계가 매번 번거롭지 않으신가요?</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS: AXEL -->
+<section class="section section-alt" id="products">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">PRODUCTS</div>
+      <h2>검증된 <em>임플란트 제품</em>을<br>합리적인 가격에</h2>
+      <p>DENTIS 사의 프리미엄 임플란트를 최대 85% 할인된 가격으로 공급합니다.</p>
+    </div>
+
+    <!-- AXEL -->
+    <div class="products-grid reveal" style="margin-bottom:64px">
+      <div class="product-img-wrap">
+        <img src="덴딜임플란트/axel 이미지.PNG" alt="AXEL 임플란트 - Dynamic Bone Chip Groove, Variable Thread Design, C-SLA Surface">
+      </div>
+      <div class="product-info">
+        <h3>AXEL Implant</h3>
+        <p class="product-sub">Accelerate Confidence, With Every Placement.<br>Stress-Free Neck Design과 Drive Thread™로 초기 고정력을 극대화한 프리미엄 임플란트.</p>
+        <div class="product-specs">
+          <div class="spec-item"><span class="spec-icon">🔩</span><span class="spec-text">Stress-Free Neck Design · <b>골 흡수 최소화</b></span></div>
+          <div class="spec-item"><span class="spec-icon">⚙️</span><span class="spec-text">Drive Thread™ · <b>초기 고정력 극대화</b></span></div>
+          <div class="spec-item"><span class="spec-icon">🧬</span><span class="spec-text">C-SLA® Surface · <b>Pure Titanium GR4</b></span></div>
+          <div class="spec-item"><span class="spec-icon">📐</span><span class="spec-text">호환: <b>오스템, 네오, 디오, 덴티움</b></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ONE Q -->
+    <div class="products-grid reveal" style="direction:rtl">
+      <div class="product-img-wrap" style="direction:ltr">
+        <img src="덴딜임플란트/ONE Q 이미지.PNG" alt="OneQ-SL 임플란트 - One System for All Implant Indications">
+      </div>
+      <div class="product-info" style="direction:ltr">
+        <h3>OneQ-SL Implant</h3>
+        <p class="product-sub">One System for All Implant Indications.<br>CE 인증, GMP 인증을 받은 다양한 적응증에 대응하는 통합 임플란트 시스템.</p>
+        <div class="product-specs">
+          <div class="spec-item"><span class="spec-icon">🏅</span><span class="spec-text">CE 2292 인증 · <b>GMP 인증</b></span></div>
+          <div class="spec-item"><span class="spec-icon">🔧</span><span class="spec-text">All-in-One System · <b>모든 적응증 대응</b></span></div>
+          <div class="spec-item"><span class="spec-icon">📐</span><span class="spec-text">호환: <b>오스템, 덴티움</b></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">FEATURES</div>
+      <h2>치과에 필요한 모든 것,<br><em>덴딜 하나로</em> 완성</h2>
+      <p>주문부터 관리까지, 직관적인 인터페이스로 누구나 쉽게 사용할 수 있습니다.</p>
+    </div>
+
+    <div class="feat-row reveal">
+      <div class="feat-img"><img src="덴딜임플란트/상품주문기능이미지.JPG" alt="원클릭 상품주문 화면"></div>
+      <div class="feat-content">
+        <span class="feat-tag">ORDER</span>
+        <h3>원클릭 상품주문</h3>
+        <p>제조사, 상품명, 모델명, 사이즈, 지름, 직경 등 다양한 필터로 원하는 임플란트를 빠르게 검색하고 바로 주문할 수 있습니다. 3,000여 개 상품, 최대 85% 할인.</p>
+      </div>
+    </div>
+
+    <div class="feat-row reveal">
+      <div class="feat-img"><img src="덴딜임플란트/즐겨찾기기능이미지.JPG" alt="즐겨찾기 기능 화면"></div>
+      <div class="feat-content">
+        <span class="feat-tag">FAVORITES</span>
+        <h3>즐겨찾기로 한눈에 관리</h3>
+        <p>자주 사용하는 임플란트를 즐겨찾기에 등록하면 재주문 시 검색 없이 바로 담기가 가능합니다. 보험코드도 함께 표시되어 관리가 편리합니다.</p>
+      </div>
+    </div>
+
+    <div class="feat-row reveal">
+      <div class="feat-img"><img src="덴딜임플란트/주문접수 내역.JPG" alt="주문내역 관리 화면"></div>
+      <div class="feat-content">
+        <span class="feat-tag">HISTORY</span>
+        <h3>주문내역 완벽 관리</h3>
+        <p>총 주문 금액, 주문 건수, 상품 수를 한눈에 확인. 주문접수·주문확인·취소 상태를 실시간으로 관리하고 Excel·이미지로 내보낼 수 있습니다.</p>
+      </div>
+    </div>
+
+    <div class="feat-row reveal">
+      <div class="feat-img"><img src="덴딜임플란트/주문내역 보고서 다운로드 기능.JPG" alt="주문 보고서 자동 생성"></div>
+      <div class="feat-content">
+        <span class="feat-tag">REPORT</span>
+        <h3>주문 보고서 자동 생성</h3>
+        <p>주문내역을 자동으로 보고서로 생성합니다. 주문번호, 상태, 제품 상세, 할인율, 금액까지 한 눈에 정리된 보고서를 다운로드 할 수 있습니다.</p>
+      </div>
+    </div>
+
+    <div class="feat-row reveal">
+      <div class="feat-img"><img src="덴딜임플란트/월별 주문 통계 이미지.JPG" alt="월별 주문 통계 화면"></div>
+      <div class="feat-content">
+        <span class="feat-tag">ANALYTICS</span>
+        <h3>월별 주문통계 & 구매영수증</h3>
+        <p>총 구매금액, 주문 건수, 평균 주문금액, 구매 수량을 한눈에. 월별 구매 추이 차트와 제조사별 구매 비율, 자주 구매한 상품 랭킹까지 확인합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TARGET -->
+<section class="section section-alt" id="target">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">TARGET</div>
+      <h2>덴딜 시스템이<br><em>필요한 치과</em></h2>
+    </div>
+    <div class="target-grid">
+      <div class="target-card reveal reveal-delay-1">
+        <div class="target-icon">🖥️</div>
+        <div class="target-num">TYPE 01</div>
+        <h4>임플란트 주문 프로그램이<br>없는 치과</h4>
+      </div>
+      <div class="target-card reveal reveal-delay-2">
+        <div class="target-icon">🔄</div>
+        <div class="target-num">TYPE 02</div>
+        <h4>직원 교체로<br>인수인계가 힘든 치과</h4>
+      </div>
+      <div class="target-card reveal reveal-delay-3">
+        <div class="target-icon">📊</div>
+        <div class="target-num">TYPE 03</div>
+        <h4>지출비용을 통계로<br>보고 싶은 치과</h4>
+      </div>
+      <div class="target-card reveal reveal-delay-4">
+        <div class="target-icon">💰</div>
+        <div class="target-num">TYPE 04</div>
+        <h4>패키지가격만큼<br>단품으로 구매하고 싶은 치과</h4>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">FAQ</div>
+      <h2>자주 묻는 <em>질문</em></h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <button class="faq-question">어떤 임플란트 제품을 취급하나요?<div class="faq-arrow"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div></button>
+        <div class="faq-answer"><div class="faq-answer-inner">DENTIS 사의 AXEL, OneQ-SL, SQ 등 프리미엄 임플란트 제품을 취급합니다. Fixture, Healing Abutment 등 3,000여 개 이상의 상품을 보유하고 있으며, 오스템·네오·디오·덴티움 호환 제품을 제공합니다.</div></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question">가격은 얼마나 할인되나요?<div class="faq-arrow"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div></button>
+        <div class="faq-answer"><div class="faq-answer-inner">제품에 따라 최대 85%까지 할인된 가격으로 구매 가능합니다. 패키지 없이 단품으로 구매할 수 있어 필요한 만큼만 합리적으로 주문할 수 있습니다. 자세한 가격은 문의 주시면 안내드립니다.</div></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question">PC와 모바일 모두 사용 가능한가요?<div class="faq-arrow"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div></button>
+        <div class="faq-answer"><div class="faq-answer-inner">네, PC 웹과 모바일 앱 모두 지원합니다. 진료실, 사무실, 이동 중에도 편리하게 주문하실 수 있으며, 모바일에서는 상품주문, 즐겨찾기, 주문내역, 채팅 문의 등 모든 기능을 사용할 수 있습니다.</div></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question">주문통계와 보고서 기능이 있나요?<div class="faq-arrow"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div></button>
+        <div class="faq-answer"><div class="faq-answer-inner">네, 월별 구매 추이 차트, 제조사별 구매 비율, 자주 구매한 상품 랭킹 등 상세한 통계를 자동으로 제공합니다. 주문내역은 Excel과 이미지로 내보낼 수 있으며, 주문 보고서도 자동 생성됩니다.</div></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question">기존에 쓰던 시스템과 호환되나요?<div class="faq-arrow"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div></button>
+        <div class="faq-answer"><div class="faq-answer-inner">덴딜 임플란트는 오스템, 네오, 디오, 포인트 등 주요 시스템과 호환되는 제품을 제공합니다. 기존에 사용하시던 시스템에 맞는 제품을 선택하여 주문하실 수 있습니다.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-banner">
+  <div class="container">
+    <div class="cta-inner">
+      <h2>임플란트 구매,<br><em>더 스마트하게</em> 시작하세요</h2>
+      <p>지금 바로 덴딜 임플란트 주문 시스템을 경험하세요.<br>더 스마트한 치과 운영이 시작됩니다.</p>
+      <div class="cta-btns">
+        <a href="https://dendeal.kr" class="btn-white">
+          무료로 시작하기
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="tel:031-360-0419" class="btn-outline-white">📞 031-360-0419</a>
+        <a href="http://pf.kakao.com/_dMbgn/chat" class="btn-outline-white" target="_blank">💬 카카오톡 문의</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-brand-logo">DENDEAL<span>.</span></div>
+        <p>기공물 배송, 치과재료, 임플란트까지. 주문과 경영을 하나로 잇는 치과 전문 디지털 플랫폼.</p>
+        <div class="footer-brand-social">
+          <a href="https://www.instagram.com/den.deal/" title="Instagram" aria-label="Instagram">📷</a>
+          <a href="https://pf.kakao.com/_SSxoxcxb" title="카카오톡" aria-label="카카오톡 채널">💬</a>
+          <a href="https://blog.naver.com/dendeil" title="블로그" aria-label="네이버 블로그">📝</a>
+        </div>
+      </div>
+      <div class="footer-services">
+        <a href="delivery.html">기공물 배송</a>
+        <a href="manufacturing.html">제조 중개</a>
+        <a href="shop.html">덴딜몰</a>
+        <a href="implant.html">덴딜 임플란트</a>
+        <a href="management.html">경영 관리</a>
+        <a href="dentalk.html">덴톡 메신저</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>
+        (주) 덴탈서비스 | 대표: 김상우 | 사업자등록번호: 544-81-00552<br>
+        경기도 안양시 동안구 엘에스로 136, 금정2차SKV1센터 지하 B111호 | 031-360-0415<br>
+        Copyright &copy; 2025 DENDEAL. All Rights Reserved.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Nav scroll
+const navbar=document.getElementById('navbar');
+window.addEventListener('scroll',()=>{navbar.classList.toggle('scrolled',window.scrollY>20)},{passive:true});
+
+// Mobile menu
+const navToggle=document.getElementById('navToggle');
+const mobileMenu=document.getElementById('mobileMenu');
+navToggle.addEventListener('click',()=>{
+  navToggle.classList.toggle('active');
+  mobileMenu.classList.toggle('open');
+  document.body.style.overflow=mobileMenu.classList.contains('open')?'hidden':'';
+});
+mobileMenu.querySelectorAll('a').forEach(link=>{
+  link.addEventListener('click',()=>{
+    navToggle.classList.remove('active');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow='';
+  });
+});
+
+// Reveal
+const revealObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revealObs.unobserve(e.target)}});
+},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>revealObs.observe(el));
+
+// FAQ
+document.querySelectorAll('.faq-question').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const item=btn.parentElement;
+    const answer=item.querySelector('.faq-answer');
+    const isOpen=item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(fi=>{fi.classList.remove('open');fi.querySelector('.faq-answer').style.maxHeight=null});
+    if(!isOpen){item.classList.add('open');answer.style.maxHeight=answer.scrollHeight+'px'}
+  });
+});
+</script>
+</body>
+</html>

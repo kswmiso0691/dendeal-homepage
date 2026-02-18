@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DENDEAL - 치과기공 디지털 플랫폼</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #0A5C50;
+  --primary-light: #0D7A6B;
+  --primary-dark: #074039;
+  --primary-pale: #E8F5F2;
+  --accent: #FF6B35;
+  --accent-hover: #E85A28;
+  --accent-soft: rgba(255,107,53,0.08);
+  --bg: #FAFCFB;
+  --bg-alt: #F3F7F6;
+  --text: #1A2332;
+  --text-sub: #5B6B7D;
+  --text-light: #8D99A8;
+  --white: #FFFFFF;
+  --border: #E4EBE9;
+  --gradient-hero: linear-gradient(160deg, #064840 0%, #0A5C50 40%, #0D7A6B 100%);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideRight{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:translateX(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes countUp{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+@keyframes gradientMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.anim{opacity:0}.anim.show{animation:fadeUp .7s cubic-bezier(.22,1,.36,1) forwards}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(250,252,251,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid transparent;transition:all .3s ease}
+nav.scrolled{border-bottom-color:rgba(228,235,233,.6);box-shadow:0 1px 24px rgba(10,92,80,.06)}
+.nav-in{max-width:1200px;margin:0 auto;padding:0 32px;height:68px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:24px;color:var(--primary);letter-spacing:-1px;text-decoration:none;display:flex;align-items:center;gap:2px}
+.logo i{color:var(--accent);font-style:normal}
+.nav-links{display:flex;gap:36px}
+.nav-links a{text-decoration:none;color:var(--text-sub);font-size:14.5px;font-weight:500;transition:.2s;position:relative}
+.nav-links a:hover{color:var(--primary)}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background:var(--primary);transform:scaleX(0);transition:.3s cubic-bezier(.22,1,.36,1);border-radius:2px}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-right{display:flex;gap:10px;align-items:center}
+.nav-login{color:var(--text-sub);text-decoration:none;font-size:14px;font-weight:500;padding:8px 18px;border-radius:100px;transition:.2s}
+.nav-login:hover{color:var(--primary);background:var(--primary-pale)}
+.nav-cta{background:var(--primary);color:#fff;padding:10px 24px;border-radius:100px;text-decoration:none;font-weight:600;font-size:13.5px;transition:.3s;border:1.5px solid var(--primary)}
+.nav-cta:hover{background:var(--primary-light);border-color:var(--primary-light);transform:translateY(-1px);box-shadow:0 4px 16px rgba(10,92,80,.2)}
+.mob-menu{display:none;background:none;border:none;cursor:pointer;padding:8px}
+.mob-menu svg{width:24px;height:24px;color:var(--text)}
+
+/* Mobile Nav Panel */
+.mob-nav{position:fixed;top:68px;left:0;right:0;background:rgba(255,255,255,.98);backdrop-filter:blur(20px);padding:20px 32px 28px;border-bottom:1px solid var(--border);transform:translateY(-110%);transition:.35s cubic-bezier(.22,1,.36,1);z-index:999;display:none;flex-direction:column;gap:6px}
+.mob-nav.open{transform:translateY(0)}
+.mob-nav a{text-decoration:none;color:var(--text);font-size:16px;font-weight:600;padding:14px 0;border-bottom:1px solid var(--border);display:block;transition:.2s}
+.mob-nav a:last-child{border-bottom:none}
+.mob-nav a:hover{color:var(--primary)}
+
+/* HERO */
+.hero{background:var(--gradient-hero);padding:140px 32px 100px;position:relative;overflow:hidden;min-height:100vh;display:flex;align-items:center}
+.hero::before{content:'';position:absolute;top:-50%;right:-20%;width:800px;height:800px;background:radial-gradient(circle,rgba(255,255,255,.04) 0%,transparent 70%);border-radius:50%}
+.hero::after{content:'';position:absolute;bottom:-30%;left:-10%;width:600px;height:600px;background:radial-gradient(circle,rgba(255,107,53,.06) 0%,transparent 70%);border-radius:50%}
+.hero-grid{display:grid;grid-template-columns:1fr .95fr;gap:80px;align-items:center}
+.hero-inner{max-width:1200px;margin:0 auto;width:100%;position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);backdrop-filter:blur(10px);color:rgba(255,255,255,.9);padding:8px 18px;border-radius:100px;font-size:13px;font-weight:600;margin-bottom:32px;border:1px solid rgba(255,255,255,.12);animation:fadeUp .7s ease}
+.hero-badge::before{content:'';width:7px;height:7px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite}
+.hero h1{font-size:52px;font-weight:900;line-height:1.25;letter-spacing:-2.5px;margin-bottom:24px;color:#fff;animation:fadeUp .7s ease .1s both}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,#5BDFCA,#A8F0E0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-desc{font-size:17.5px;line-height:1.85;color:rgba(255,255,255,.65);margin-bottom:44px;max-width:460px;animation:fadeUp .7s ease .2s both}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;animation:fadeUp .7s ease .3s both}
+.btn-accent{background:var(--accent);color:#fff;padding:16px 36px;border-radius:100px;text-decoration:none;font-weight:700;font-size:15.5px;display:inline-flex;align-items:center;gap:10px;transition:.3s;box-shadow:0 6px 24px rgba(255,107,53,.3)}
+.btn-accent:hover{background:var(--accent-hover);transform:translateY(-2px);box-shadow:0 10px 34px rgba(255,107,53,.4)}
+.btn-ghost{background:transparent;color:rgba(255,255,255,.85);padding:16px 36px;border-radius:100px;text-decoration:none;font-weight:600;font-size:15.5px;display:inline-flex;align-items:center;gap:10px;transition:.3s;border:1.5px solid rgba(255,255,255,.2)}
+.btn-ghost:hover{border-color:rgba(255,255,255,.5);color:#fff;transform:translateY(-2px);background:rgba(255,255,255,.06)}
+
+/* Hero Category Cards */
+.hero-cats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:28px;max-height:0;overflow:hidden;opacity:0;transition:all .4s cubic-bezier(.4,0,.2,1)}
+.hero-cats.open{max-height:400px;opacity:1}
+.hcat{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.08);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px 16px;text-decoration:none;color:rgba(255,255,255,.9);transition:.25s;cursor:pointer}
+.hcat:hover{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.14);transform:translateY(-2px)}
+.hcat-ic{width:40px;height:40px;border-radius:11px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.hcat-txt{flex:1;display:flex;flex-direction:column;gap:2px}
+.hcat-txt b{font-size:13.5px;font-weight:700;letter-spacing:-.3px}
+.hcat-txt small{font-size:11px;color:rgba(255,255,255,.5);font-weight:400}
+.hcat>svg{color:rgba(255,255,255,.4);flex-shrink:0;transition:.2s}
+.hcat:hover>svg{color:#fff;transform:translateX(3px)}
+
+/* Hero Visual */
+.hero-vis{position:relative;animation:fadeUp .9s ease .3s both}
+.app-mock{width:320px;height:640px;background:#1A1A1A;border-radius:40px;padding:10px;box-shadow:0 50px 100px rgba(0,0,0,.35),0 0 0 1px rgba(255,255,255,.06);margin:0 auto;position:relative}
+.app-mock::before{content:'';position:absolute;top:10px;left:50%;transform:translateX(-50%);width:100px;height:24px;background:#1A1A1A;border-radius:0 0 14px 14px;z-index:5}
+.app-screen{width:100%;height:100%;background:#fff;border-radius:32px;overflow:hidden;display:flex;flex-direction:column}
+.app-header-blue{display:flex;justify-content:space-between;align-items:center;padding:28px 18px 8px;background:linear-gradient(135deg,#1a6dd4,#2A7DE1)}
+.app-logo-white{font-family:'Plus Jakarta Sans',sans-serif;font-size:19px;font-weight:900;color:#fff}
+.app-gear{font-size:14px;opacity:.8}
+.app-welcome{background:linear-gradient(135deg,#1a6dd4,#2A7DE1);padding:6px 18px 16px}
+.app-welcome-sub{font-size:10px;color:rgba(255,255,255,.75);font-weight:500}
+.app-welcome-name{font-size:16px;font-weight:800;color:#fff}
+.app-intro-banner{margin:12px 14px;background:linear-gradient(135deg,#F7F5F0,#FFF9F0);border-radius:12px;padding:14px;border:1px solid #E8E0D0;position:relative;overflow:hidden}
+.aib-top{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.aib-icon{font-size:16px}
+.aib-title-main{font-size:12px;font-weight:800;color:#333;letter-spacing:-.3px}
+.aib-desc{font-size:9px;color:#666;line-height:1.6;margin-bottom:10px}
+.aib-desc b{color:#1A5CB0;font-weight:700}
+.aib-features{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.aib-feat{display:flex;align-items:center;gap:3px;background:#fff;border:1px solid #E0D8C8;border-radius:5px;padding:4px 8px;font-size:8px;font-weight:600;color:#555}
+.aib-feat-ic{font-size:10px}
+.aib-phone{text-align:center;font-size:8px;color:#AAA;margin-top:2px}
+.app-icon-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:16px 24px;padding:16px 20px}
+.aig-item{display:flex;flex-direction:column;align-items:center;gap:6px}
+.aig-circle{width:52px;height:52px;background:#F0F4F8;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;border:1px solid #E4EAF0;transition:.2s}
+.aig-label{font-size:9.5px;font-weight:600;color:#444}
+.app-bnav{display:flex;justify-content:space-around;align-items:center;padding:10px 0 14px;border-top:1px solid #F0F0F0;background:#fff;margin-top:auto}
+.bnav-item{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:17px;cursor:pointer;color:#999}
+.bnav-item.active{color:#2A7DE1}
+.bnav-item small{font-size:8px;color:#999;font-weight:500}
+.bnav-item.active small{color:#2A7DE1;font-weight:700}
+
+/* Floating badges on hero visual */
+.float-badge{position:absolute;background:#fff;border-radius:14px;padding:12px 16px;box-shadow:0 8px 32px rgba(0,0,0,.12);display:flex;align-items:center;gap:10px;z-index:10;animation:float 4s ease-in-out infinite}
+.float-badge.tl{top:40px;left:-40px;animation-delay:0s}
+.float-badge.br{bottom:80px;right:-40px;animation-delay:1.5s}
+.float-badge .fb-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.float-badge .fb-icon.green{background:var(--primary-pale)}
+.float-badge .fb-icon.orange{background:var(--accent-soft)}
+.float-badge .fb-text{display:flex;flex-direction:column;gap:1px}
+.float-badge .fb-text b{font-size:12px;font-weight:700;color:var(--text)}
+.float-badge .fb-text small{font-size:10px;color:var(--text-light)}
+
+/* SOCIAL PROOF BAR */
+.social-proof{padding:48px 32px;background:#fff;border-bottom:1px solid var(--border)}
+.social-proof-in{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:40px;justify-content:center;flex-wrap:wrap}
+.sp-item{display:flex;align-items:center;gap:14px}
+.sp-num{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;color:var(--primary);letter-spacing:-1px}
+.sp-label{font-size:13px;color:var(--text-sub);line-height:1.4;font-weight:500}
+.sp-divider{width:1px;height:40px;background:var(--border)}
+
+/* SECTION HEADERS */
+.sec-h{text-align:center;margin-bottom:60px}
+.sec-tag{display:inline-flex;align-items:center;gap:6px;background:var(--primary-pale);color:var(--primary);padding:7px 16px;border-radius:100px;font-size:12px;font-weight:700;letter-spacing:.5px;margin-bottom:20px}
+.sec-h h2{font-size:38px;font-weight:900;letter-spacing:-1.8px;line-height:1.35;margin-bottom:16px}
+.sec-h h2 em{font-style:normal;color:var(--primary)}
+.sec-h p{font-size:16px;color:var(--text-sub);line-height:1.75;max-width:520px;margin:0 auto}
+
+/* SERVICES */
+.services{padding:120px 32px;max-width:1200px;margin:0 auto}
+.srv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.srv{background:#fff;border-radius:20px;padding:36px 30px;border:1px solid var(--border);transition:.4s cubic-bezier(.22,1,.36,1);position:relative;overflow:hidden;cursor:pointer}
+.srv::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--primary),var(--accent));transform:scaleX(0);transform-origin:left;transition:.4s}
+.srv:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(10,92,80,.1);border-color:transparent}
+.srv:hover::before{transform:scaleX(1)}
+.srv-icon{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:24px;transition:.3s}
+.srv-icon.t{background:var(--primary-pale)}.srv-icon.o{background:var(--accent-soft)}.srv-icon.b{background:#EBF0FF}
+.srv:hover .srv-icon{transform:scale(1.08)}
+.srv h3{font-size:19px;font-weight:800;margin-bottom:10px;letter-spacing:-.4px}
+.srv p{font-size:14px;line-height:1.8;color:var(--text-sub)}
+.srv-tag{display:inline-block;margin-top:20px;font-size:11px;font-weight:700;color:var(--primary);padding:5px 14px;background:var(--primary-pale);border-radius:100px;letter-spacing:.3px}
+
+/* VALUE PROPOSITION */
+.value{padding:120px 32px;background:var(--bg-alt)}
+.value-in{max-width:1200px;margin:0 auto}
+.value-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.value-visual{position:relative}
+.phone{width:280px;height:560px;background:var(--text);border-radius:38px;padding:10px;box-shadow:0 40px 80px rgba(26,35,50,.22);margin:0 auto;position:relative}
+.phone-scr{width:100%;height:100%;background:#fff;border-radius:30px;overflow:hidden}
+.ph-bar{background:var(--primary);padding:10px 18px 14px;display:flex;justify-content:space-between;align-items:center}
+.ph-bar span{color:rgba(255,255,255,.8);font-size:10.5px;font-weight:600}
+.ph-hd{background:var(--primary);padding:0 18px 18px;color:#fff}
+.ph-hd h4{font-size:18px;font-weight:800;margin-bottom:2px}
+.ph-hd p{font-size:11px;opacity:.7}
+.ph-body{padding:14px}
+.ph-card{background:var(--bg-alt);border-radius:12px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:11px;transition:.2s}
+.ph-card:hover{background:var(--primary-pale)}
+.ph-card-ic{width:38px;height:38px;border-radius:11px;background:var(--primary-pale);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.ph-card h5{font-size:13px;font-weight:700;margin-bottom:2px}
+.ph-card p{font-size:10.5px;color:var(--text-light)}
+.value-feats{display:flex;flex-direction:column;gap:8px}
+.vf{display:flex;gap:18px;align-items:flex-start;padding:24px;border-radius:18px;transition:.3s;border:1px solid transparent}
+.vf:hover{background:#fff;box-shadow:0 4px 20px rgba(10,92,80,.06);border-color:var(--border)}
+.vf-ic{width:48px;height:48px;border-radius:14px;background:var(--primary-pale);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;transition:.3s}
+.vf:hover .vf-ic{background:var(--primary);filter:brightness(1.2)}
+.vf h4{font-size:17px;font-weight:800;margin-bottom:6px;letter-spacing:-.3px}
+.vf p{font-size:14px;line-height:1.75;color:var(--text-sub)}
+
+/* STATS */
+.stats{padding:80px 32px;background:var(--gradient-hero);position:relative;overflow:hidden}
+.stats::before{content:'';position:absolute;top:-200px;right:-200px;width:500px;height:500px;background:radial-gradient(circle,rgba(255,255,255,.04) 0%,transparent 70%);border-radius:50%}
+.stats::after{content:'';position:absolute;bottom:-150px;left:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(255,107,53,.06) 0%,transparent 70%);border-radius:50%}
+.stats-in{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:40px;text-align:center;position:relative;z-index:1}
+.stat{padding:10px 0}
+.stat b{font-family:'Plus Jakarta Sans',sans-serif;font-size:50px;font-weight:800;color:#fff;letter-spacing:-2px;display:block;margin-bottom:8px}
+.stat b span{font-size:28px;font-weight:600}
+.stat small{font-size:14px;font-weight:500;color:rgba(255,255,255,.5);letter-spacing:.3px}
+
+/* WORKFLOW */
+.flow{padding:120px 32px;max-width:1200px;margin:0 auto}
+.flow-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;position:relative}
+.flow-steps::before{content:'';position:absolute;top:44px;left:12.5%;right:12.5%;height:2px;background:linear-gradient(90deg,var(--primary-pale),var(--primary),var(--primary-pale));z-index:0}
+.step{text-align:center;position:relative;z-index:1}
+.step-n{width:50px;height:50px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:18px;box-shadow:0 4px 16px rgba(10,92,80,.2);transition:.3s}
+.step:hover .step-n{transform:scale(1.1);box-shadow:0 6px 22px rgba(10,92,80,.3)}
+.step h4{font-size:16px;font-weight:800;margin-bottom:8px;letter-spacing:-.3px}
+.step p{font-size:13.5px;line-height:1.7;color:var(--text-sub)}
+
+/* TESTIMONIAL */
+.testimonial{padding:120px 32px;background:var(--bg-alt)}
+.testimonial-in{max-width:1200px;margin:0 auto}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.testi-card{background:#fff;border-radius:20px;padding:32px 28px;border:1px solid var(--border);transition:.3s}
+.testi-card:hover{transform:translateY(-4px);box-shadow:0 12px 36px rgba(10,92,80,.08)}
+.testi-stars{color:var(--accent);font-size:14px;margin-bottom:16px;letter-spacing:2px}
+.testi-text{font-size:14.5px;line-height:1.8;color:var(--text-sub);margin-bottom:24px;font-weight:400}
+.testi-author{display:flex;align-items:center;gap:12px}
+.testi-avatar{width:42px;height:42px;border-radius:50%;background:var(--primary-pale);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.testi-info b{font-size:14px;font-weight:700;display:block;margin-bottom:2px}
+.testi-info small{font-size:12px;color:var(--text-light)}
+
+/* CTA */
+.cta{padding:110px 32px;background:var(--gradient-hero);position:relative;overflow:hidden}
+.cta::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:1000px;height:600px;background:radial-gradient(ellipse,rgba(255,255,255,.04) 0%,transparent 70%)}
+.cta-in{max-width:700px;margin:0 auto;text-align:center;position:relative;z-index:1}
+.cta-in h2{font-size:40px;font-weight:900;letter-spacing:-2px;margin-bottom:18px;line-height:1.35;color:#fff}
+.cta-in h2 em{font-style:normal;background:linear-gradient(135deg,#5BDFCA,#A8F0E0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.cta-in>p{font-size:16px;color:rgba(255,255,255,.6);line-height:1.8;margin-bottom:40px}
+.cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn-white{background:#fff;color:var(--primary);padding:16px 36px;border-radius:100px;text-decoration:none;font-weight:700;font-size:15.5px;display:inline-flex;align-items:center;gap:10px;transition:.3s;box-shadow:0 6px 24px rgba(0,0,0,.12)}
+.btn-white:hover{transform:translateY(-2px);box-shadow:0 10px 34px rgba(0,0,0,.18)}
+.btn-outline-w{background:transparent;color:#fff;padding:16px 36px;border-radius:100px;text-decoration:none;font-weight:600;font-size:15.5px;display:inline-flex;align-items:center;gap:10px;transition:.3s;border:1.5px solid rgba(255,255,255,.25)}
+.btn-outline-w:hover{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.08);transform:translateY(-2px)}
+.app-row{display:flex;gap:12px;justify-content:center;margin-top:28px;flex-wrap:wrap}
+.app-b{background:rgba(255,255,255,.08);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12);padding:10px 20px;border-radius:14px;font-size:13.5px;font-weight:600;color:rgba(255,255,255,.85);text-decoration:none;display:flex;align-items:center;gap:8px;transition:.25s}
+.app-b:hover{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.14);transform:translateY(-1px)}
+
+/* FOOTER */
+footer{padding:72px 32px 40px;background:#111820;color:rgba(255,255,255,.5)}
+.ft-in{max-width:1200px;margin:0 auto}
+.ft-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.06)}
+.ft-brand .ft-logo{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:22px;color:#fff;margin-bottom:14px}
+.ft-brand .ft-logo i{color:var(--accent);font-style:normal}
+.ft-brand p{font-size:13.5px;line-height:1.75;max-width:300px}
+.ft-col h5{color:rgba(255,255,255,.8);font-size:12.5px;font-weight:700;margin-bottom:18px;letter-spacing:.5px;text-transform:uppercase}
+.ft-col a{display:block;color:rgba(255,255,255,.4);text-decoration:none;font-size:13.5px;margin-bottom:10px;transition:.2s}
+.ft-col a:hover{color:rgba(255,255,255,.8)}
+.ft-bot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.ft-bot p{font-size:12px;line-height:1.85}
+.ft-social{display:flex;gap:10px}
+.ft-social a{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:14px;transition:.25s;color:rgba(255,255,255,.45)}
+.ft-social a:hover{background:rgba(255,255,255,.12);color:#fff;transform:translateY(-2px)}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .hero-grid{grid-template-columns:1fr;gap:60px;text-align:center}
+  .hero-desc{margin:0 auto 44px}
+  .hero-btns{justify-content:center}
+  .hero-vis{order:-1}
+  .float-badge.tl{left:10px;top:20px}.float-badge.br{right:10px;bottom:60px}
+  .srv-grid{grid-template-columns:repeat(2,1fr)}
+  .value-grid{grid-template-columns:1fr;gap:60px}
+  .value-visual{order:-1}
+  .stats-in{grid-template-columns:repeat(2,1fr);gap:32px}
+  .flow-steps{grid-template-columns:repeat(2,1fr);gap:28px}
+  .flow-steps::before{display:none}
+  .testi-grid{grid-template-columns:1fr 1fr}
+  .ft-top{grid-template-columns:1fr 1fr}
+  .social-proof-in{gap:24px}
+}
+@media(max-width:768px){
+  .nav-links{display:none}.mob-menu{display:block}.mob-nav{display:flex}
+  .hero{padding:120px 24px 60px;min-height:auto}
+  .hero h1{font-size:34px;letter-spacing:-1.2px}
+  .hero-desc{font-size:15px}
+  .sec-h h2{font-size:28px}
+  .services{padding:80px 24px}
+  .srv-grid{grid-template-columns:1fr}
+  .value{padding:80px 24px}
+  .stats{padding:60px 24px}.stat b{font-size:36px}
+  .flow{padding:80px 24px}
+  .flow-steps{grid-template-columns:1fr;gap:24px}
+  .testimonial{padding:80px 24px}
+  .testi-grid{grid-template-columns:1fr}
+  .cta{padding:80px 24px}.cta-in h2{font-size:28px}
+  .ft-top{grid-template-columns:1fr}
+  .phone{width:240px;height:480px}
+  .app-mock{width:260px;height:510px}
+  .float-badge{display:none}
+  .social-proof-in{flex-direction:column;gap:20px}
+  .sp-divider{width:60px;height:1px}
+}
+@media(max-width:480px){
+  .hero h1{font-size:28px}
+  .btn-accent,.btn-ghost,.btn-white,.btn-outline-w{padding:14px 28px;font-size:14px}
+  .hero-btns,.cta-btns{flex-direction:column;align-items:center}
+  .hero-cats{grid-template-columns:1fr}
+  .app-mock{width:240px;height:470px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nb">
+<div class="nav-in">
+  <a href="#" class="logo">DENDEAL<i>.</i></a>
+  <div class="nav-links">
+    <a href="#services">서비스</a>
+    <a href="#platform">플랫폼</a>
+    <a href="#flow">이용방법</a>
+    <a href="#reviews">고객후기</a>
+  </div>
+  <div class="nav-right">
+    <a href="#" class="nav-login">로그인</a>
+    <a href="#" class="nav-cta">무료 시작하기</a>
+  </div>
+  <button class="mob-menu" onclick="document.querySelector('.mob-nav').classList.toggle('open')">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+</div>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="mob-nav">
+  <a href="#services" onclick="document.querySelector('.mob-nav').classList.remove('open')">서비스</a>
+  <a href="#platform" onclick="document.querySelector('.mob-nav').classList.remove('open')">플랫폼</a>
+  <a href="#flow" onclick="document.querySelector('.mob-nav').classList.remove('open')">이용방법</a>
+  <a href="#reviews" onclick="document.querySelector('.mob-nav').classList.remove('open')">고객후기</a>
+  <a href="#" style="color:var(--primary);font-weight:700">무료 시작하기</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+<div class="hero-inner">
+  <div class="hero-grid">
+    <div class="hero-content">
+      <div class="hero-badge">Dental Tech Platform</div>
+      <h1>치과기공의 모든 것,<br><em>하나의 플랫폼</em>에서</h1>
+      <p class="hero-desc">기공물 배송, 치과재료 구매, 임플란트 공급까지. 간편한 주문관리와 데이터 기반 경영 분석을 하나의 디지털 플랫폼에서 경험하세요.</p>
+      <div class="hero-btns">
+        <a href="#" class="btn-accent">플랫폼 시작하기 <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        <a href="#" class="btn-ghost srv-toggle" onclick="document.querySelector('.hero-cats').classList.toggle('open');return false">서비스 둘러보기 <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></a>
+      </div>
+      <div class="hero-cats">
+        <a href="#" class="hcat"><span class="hcat-ic">🚚</span><span class="hcat-txt"><b>치과기공배송</b><small>수거부터 납품까지 원스톱</small></span><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></a>
+        <a href="#" class="hcat"><span class="hcat-ic">🛒</span><span class="hcat-txt"><b>덴딜쇼핑몰</b><small>치과재료 최대 82% 할인</small></span><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></a>
+        <a href="#" class="hcat"><span class="hcat-ic">🔩</span><span class="hcat-txt"><b>덴딜임플란트</b><small>검증된 임플란트 합리적 가격</small></span><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></a>
+        <a href="#" class="hcat"><span class="hcat-ic">🏭</span><span class="hcat-txt"><b>제조중개서비스</b><small>투명한 가격의 기공물 제조</small></span><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></a>
+      </div>
+    </div>
+    <div class="hero-vis">
+      <div class="float-badge tl">
+        <div class="fb-icon green">🚀</div>
+        <div class="fb-text"><b>실시간 배송 추적</b><small>3건 배송중</small></div>
+      </div>
+      <div class="float-badge br">
+        <div class="fb-icon orange">💰</div>
+        <div class="fb-text"><b>이번 달 절감</b><small>₩1,240,000</small></div>
+      </div>
+      <div class="app-mock">
+        <div class="app-screen">
+          <div class="app-header-blue">
+            <div class="app-logo-white">Den.deal</div>
+            <div class="app-gear">⚙️</div>
+          </div>
+          <div class="app-welcome">
+            <div class="app-welcome-sub">환영합니다!</div>
+            <div class="app-welcome-name">덴딜</div>
+          </div>
+          <div class="app-intro-banner">
+            <div class="aib-top">
+              <span class="aib-icon">🦷</span>
+              <span class="aib-title-main">DENDEAL 서비스 안내</span>
+            </div>
+            <div class="aib-desc">기공물 배송 · 치과재료 구매 · 임플란트까지<br>간편한 주문관리와 통계를 시스템화한<br><b>치과 전문 디지털 플랫폼</b>입니다.</div>
+            <div class="aib-features">
+              <div class="aib-feat"><span class="aib-feat-ic">🚛</span><span>새벽 · 퀵배송</span></div>
+              <div class="aib-feat"><span class="aib-feat-ic">📊</span><span>통계 관리</span></div>
+              <div class="aib-feat"><span class="aib-feat-ic">💰</span><span>최대 82% 절감</span></div>
+            </div>
+            <div class="aib-phone">문의 031-360-0415</div>
+          </div>
+          <div class="app-icon-grid">
+            <div class="aig-item"><div class="aig-circle">🚛</div><div class="aig-label">새벽배송</div></div>
+            <div class="aig-item"><div class="aig-circle">🏍️</div><div class="aig-label">퀵배송</div></div>
+            <div class="aig-item"><div class="aig-circle">💬</div><div class="aig-label">덴톡</div></div>
+            <div class="aig-item"><div class="aig-circle">🏭</div><div class="aig-label">제조중개</div></div>
+            <div class="aig-item"><div class="aig-circle">🛒</div><div class="aig-label">쇼핑몰</div></div>
+          </div>
+          <div class="app-bnav">
+            <div class="bnav-item"><span>📋</span></div>
+            <div class="bnav-item"><span>🚚</span></div>
+            <div class="bnav-item active"><span>🏠</span></div>
+            <div class="bnav-item"><span>💬</span></div>
+            <div class="bnav-item"><span>🛒</span></div>
+            <div class="bnav-item"><span>•••</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- SOCIAL PROOF BAR -->
+<section class="social-proof">
+<div class="social-proof-in">
+  <div class="sp-item">
+    <div class="sp-num">500+</div>
+    <div class="sp-label">등록 치과 &<br>기공소</div>
+  </div>
+  <div class="sp-divider"></div>
+  <div class="sp-item">
+    <div class="sp-num">12,000+</div>
+    <div class="sp-label">월간 처리<br>건수</div>
+  </div>
+  <div class="sp-divider"></div>
+  <div class="sp-item">
+    <div class="sp-num">82%</div>
+    <div class="sp-label">평균 재료비<br>절감율</div>
+  </div>
+  <div class="sp-divider"></div>
+  <div class="sp-item">
+    <div class="sp-num">99%</div>
+    <div class="sp-label">고객<br>만족도</div>
+  </div>
+</div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+<div class="sec-h anim">
+  <div class="sec-tag">SERVICES</div>
+  <h2>치과기공에 필요한 <em>모든 서비스</em>,<br>하나의 플랫폼에서</h2>
+  <p>배송부터 구매, 경영관리까지 모든 과정을 하나의 플랫폼에서 관리하세요.</p>
+</div>
+<div class="srv-grid">
+  <div class="srv anim">
+    <div class="srv-icon t">🚚</div>
+    <h3>기공물 배송</h3>
+    <p>치아의 위생과 보존 상태를 우선하는 기공물 전문 배송. 수거부터 납품까지 실시간으로 추적할 수 있습니다.</p>
+    <span class="srv-tag">DELIVERY</span>
+  </div>
+  <div class="srv anim">
+    <div class="srv-icon o">🏭</div>
+    <h3>제조 중개</h3>
+    <p>보철물, 교정장치 등 다양한 기공물의 제조를 투명한 가격과 품질 보증으로 중개합니다.</p>
+    <span class="srv-tag">MANUFACTURING</span>
+  </div>
+  <div class="srv anim">
+    <div class="srv-icon b">🛒</div>
+    <h3>덴딜몰</h3>
+    <p>치과 재료부터 소모품까지, 최대 82% 할인된 가격으로 필요한 재료를 바로 주문하세요.</p>
+    <span class="srv-tag">MARKETPLACE</span>
+  </div>
+  <div class="srv anim">
+    <div class="srv-icon t">🔩</div>
+    <h3>덴딜 임플란트</h3>
+    <p>검증된 임플란트 제품을 합리적인 가격에 공급합니다. 다양한 시스템 호환 제품 제공.</p>
+    <span class="srv-tag">IMPLANT</span>
+  </div>
+  <div class="srv anim">
+    <div class="srv-icon o">📊</div>
+    <h3>경영 관리</h3>
+    <p>주문, 매출, 거래처, 재고를 한눈에. 데이터 기반의 스마트한 치과 경영을 지원합니다.</p>
+    <span class="srv-tag">MANAGEMENT</span>
+  </div>
+  <div class="srv anim">
+    <div class="srv-icon b">🤖</div>
+    <h3>AI 어시스턴트</h3>
+    <p>자연어로 주문하고, AI가 최적의 기공소와 재료를 추천합니다. 반복 업무는 자동화로.</p>
+    <span class="srv-tag">AI POWERED</span>
+  </div>
+</div>
+</section>
+
+<!-- VALUE PROPOSITION -->
+<section class="value" id="platform">
+<div class="value-in">
+  <div class="sec-h anim">
+    <div class="sec-tag">PLATFORM</div>
+    <h2>왜 <em>덴딜</em>인가요?</h2>
+    <p>치과 업계에 최적화된 디지털 솔루션으로 주문과 경영 효율을 극대화합니다.</p>
+  </div>
+  <div class="value-grid">
+    <div class="value-visual anim">
+      <div class="phone">
+        <div class="phone-scr">
+          <div class="ph-bar"><span>9:41</span><span>●●● WiFi 🔋</span></div>
+          <div class="ph-hd"><h4>DENDEAL</h4><p>오늘의 현황</p></div>
+          <div class="ph-body">
+            <div class="ph-card"><div class="ph-card-ic">📋</div><div><h5>신규 주문 3건</h5><p>임플란트 2건, 재료 1건</p></div></div>
+            <div class="ph-card"><div class="ph-card-ic">🚀</div><div><h5>배송 완료 5건</h5><p>금일 수거 완료</p></div></div>
+            <div class="ph-card"><div class="ph-card-ic">💰</div><div><h5>이번 달 절감액</h5><p>₩1,240,000 절감</p></div></div>
+            <div class="ph-card"><div class="ph-card-ic">📦</div><div><h5>덴딜몰 주문</h5><p>레진시멘트 외 2건 진행중</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="value-feats">
+        <div class="vf anim"><div class="vf-ic">⚡</div><div><h4>올인원 플랫폼</h4><p>기공물 배송, 재료 주문, 경영관리까지 하나의 앱에서. 더 이상 여러 채널을 오갈 필요가 없습니다.</p></div></div>
+        <div class="vf anim"><div class="vf-ic">💡</div><div><h4>투명한 가격 비교</h4><p>재료별 시세를 한눈에 비교하고 최적의 선택을 하세요. 합리적인 가격으로 비용을 절감합니다.</p></div></div>
+        <div class="vf anim"><div class="vf-ic">📱</div><div><h4>모바일 우선 설계</h4><p>iOS, Android 네이티브 앱으로 어디서든 실시간 관리. PC 웹에서도 동일한 경험을 제공합니다.</p></div></div>
+        <div class="vf anim"><div class="vf-ic">🔒</div><div><h4>안전한 데이터 관리</h4><p>환자 정보와 거래 데이터를 안전하게 암호화 처리하여 보관합니다.</p></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+<div class="stats-in">
+  <div class="stat anim"><b>500<span>+</span></b><small>등록 치과 수</small></div>
+  <div class="stat anim"><b>12K<span>+</span></b><small>월간 처리 건수</small></div>
+  <div class="stat anim"><b>82<span>%</span></b><small>평균 재료비 절감</small></div>
+  <div class="stat anim"><b>99<span>%</span></b><small>고객 만족도</small></div>
+</div>
+</section>
+
+<!-- WORKFLOW -->
+<section class="flow" id="flow">
+<div class="sec-h anim">
+  <div class="sec-tag">HOW IT WORKS</div>
+  <h2>4단계로 시작하는<br><em>스마트 치과기공</em></h2>
+  <p>복잡한 설정 없이, 가입 즉시 모든 서비스를 이용할 수 있습니다.</p>
+</div>
+<div class="flow-steps">
+  <div class="step anim"><div class="step-n">1</div><h4>무료 가입</h4><p>치과 또는 기공소로<br>간편 가입</p></div>
+  <div class="step anim"><div class="step-n">2</div><h4>맞춤 설정</h4><p>주요 거래처와<br>선호 조건 설정</p></div>
+  <div class="step anim"><div class="step-n">3</div><h4>주문 & 배송</h4><p>재료·임플란트 구매<br>기공물 배송 관리</p></div>
+  <div class="step anim"><div class="step-n">4</div><h4>관리 & 성장</h4><p>데이터 기반<br>경영 최적화</p></div>
+</div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonial" id="reviews">
+<div class="testimonial-in">
+  <div class="sec-h anim">
+    <div class="sec-tag">REVIEWS</div>
+    <h2>덴딜과 함께하는<br><em>파트너</em>들의 이야기</h2>
+    <p>실제 덴딜을 사용하고 계신 치과와 기공소의 생생한 후기입니다.</p>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card anim">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"기공물 배송 걱정이 사라졌어요. 실시간 추적이 되니까 환자 스케줄 관리가 훨씬 수월해졌습니다."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">🦷</div>
+        <div class="testi-info">
+          <b>김OO 원장</b>
+          <small>서울 강남구 치과의원</small>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card anim">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"재료비를 60% 이상 절감했어요. 덴딜몰 가격이 정말 합리적이고 배송도 빨라서 만족합니다."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">🏭</div>
+        <div class="testi-info">
+          <b>이OO 소장</b>
+          <small>경기 수원시 기공소</small>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card anim">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"여러 거래처 관리가 한 곳에서 되니 업무 효율이 확실히 올랐어요. 경영 데이터도 한눈에 보여서 좋습니다."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">🏥</div>
+        <div class="testi-info">
+          <b>박OO 실장</b>
+          <small>인천 부평구 치과병원</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+<div class="cta-in">
+  <h2>치과기공의 디지털 전환,<br><em>덴딜</em>에서 시작하세요</h2>
+  <p>가입 즉시 모든 서비스를 무료로 체험할 수 있습니다.<br>지금 바로 플랫폼의 편리함을 경험해보세요.</p>
+  <div class="cta-btns">
+    <a href="#" class="btn-white">무료로 시작하기 <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    <a href="#" class="btn-outline-w">제휴 문의하기</a>
+  </div>
+  <div class="app-row">
+    <a href="https://apps.apple.com/kr/app/%EB%8D%B4%EB%94%9C/id6748289992" class="app-b">🍎 App Store</a>
+    <a href="https://play.google.com/store/apps/details?id=com.dendeal.v2.dendeal" class="app-b">▶️ Google Play</a>
+    <a href="https://dendeal.kr" class="app-b">🖥️ PC 버전</a>
+  </div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+<div class="ft-in">
+  <div class="ft-top">
+    <div class="ft-brand">
+      <div class="ft-logo">DENDEAL<i>.</i></div>
+      <p>기공물 배송, 치과재료, 임플란트까지. 주문과 경영을 하나로 잇는 치과 전문 디지털 플랫폼.</p>
+    </div>
+    <div class="ft-col">
+      <h5>서비스</h5>
+      <a href="#">기공물 배송</a><a href="#">제조 중개</a><a href="#">덴딜몰</a><a href="#">덴딜 임플란트</a>
+    </div>
+    <div class="ft-col">
+      <h5>지원</h5>
+      <a href="#">이용 가이드</a><a href="#">자주 묻는 질문</a><a href="#">제휴 문의</a><a href="#">고객센터</a>
+    </div>
+    <div class="ft-col">
+      <h5>회사</h5>
+      <a href="#">회사 소개</a><a href="#">공지사항</a><a href="#">이용약관</a><a href="#">개인정보처리방침</a>
+    </div>
+  </div>
+  <div class="ft-bot">
+    <p>(주) 덴탈서비스 | 대표: 김상우 | 사업자등록번호: 544-81-00552<br>경기도 안양시 동안구 엘에스로 136, B111호 | 031-360-0415<br>Copyright &copy; 2025 DENDEAL. All Rights Reserved.</p>
+    <div class="ft-social">
+      <a href="https://www.instagram.com/den.deal/" title="Instagram">📷</a>
+      <a href="https://pf.kakao.com/_SSxoxcxb" title="카카오톡">💬</a>
+      <a href="https://blog.naver.com/dendeil" title="블로그">📝</a>
+    </div>
+  </div>
+</div>
+</footer>
+
+<script>
+// Nav scroll effect
+window.addEventListener('scroll',()=>{
+  document.getElementById('nb').classList.toggle('scrolled',window.scrollY>20);
+});
+
+// Scroll animation observer
+const obs=new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('show'),i*100);
+      obs.unobserve(e.target);
+    }
+  });
+},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.anim').forEach(el=>obs.observe(el));
+
+// Counter animation for stats
+const counterObs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const b=e.target.querySelector('b');
+      if(!b||b.dataset.counted) return;
+      b.dataset.counted='1';
+      const text=b.textContent;
+      const match=text.match(/^([\d,.]+[K]?)/);
+      if(!match) return;
+      let target=match[1];
+      let suffix=text.replace(target,'');
+      let isK=target.includes('K');
+      let num=parseFloat(target.replace(/[K,]/g,''));
+      let duration=1200;
+      let start=performance.now();
+      function animate(now){
+        let progress=Math.min((now-start)/duration,1);
+        let eased=1-Math.pow(1-progress,3);
+        let current=Math.round(num*eased);
+        if(isK) b.innerHTML=current+'K'+suffix;
+        else b.innerHTML=(current>=1000?current.toLocaleString():current)+suffix;
+        if(progress<1) requestAnimationFrame(animate);
+        else{
+          if(isK) b.innerHTML=num+'K'+suffix;
+          else b.innerHTML=(num>=1000?num.toLocaleString():num)+suffix;
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+  });
+},{threshold:.3});
+document.querySelectorAll('.stat').forEach(el=>counterObs.observe(el));
+
+// Smooth nav link active state
+const sections=document.querySelectorAll('section[id]');
+window.addEventListener('scroll',()=>{
+  let current='';
+  sections.forEach(s=>{
+    if(window.scrollY>=s.offsetTop-200) current=s.getAttribute('id');
+  });
+  document.querySelectorAll('.nav-links a').forEach(a=>{
+    a.style.color=a.getAttribute('href')==='#'+current?'var(--primary)':'';
+  });
+});
+</script>
+</body>
+</html>
