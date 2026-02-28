@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://dendeal.ai.kr/sitemap.xml
+Sitemap: http://dendeal.ai.kr/sitemap.xml
 
 #DaumWebMasterTool:810d16634d156b17830942252915346a06c1fc3c07d8697b06a8066e300b9321:g4FqG9DIBQPU4d69wz04fQ==
