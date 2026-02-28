@@ -4,49 +4,49 @@
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
   <url>
-    <loc>http://dendeal.ai.kr/</loc>
+    <loc>https://dendeal.ai.kr/</loc>
     <lastmod>2026-02-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>http://dendeal.ai.kr/about.html</loc>
+    <loc>https://dendeal.ai.kr/about.html</loc>
     <lastmod>2026-02-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>http://dendeal.ai.kr/delivery.html</loc>
+    <loc>https://dendeal.ai.kr/delivery.html</loc>
     <lastmod>2026-02-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>http://dendeal.ai.kr/shop.html</loc>
+    <loc>https://dendeal.ai.kr/shop.html</loc>
     <lastmod>2026-02-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>http://dendeal.ai.kr/manufacturing.html</loc>
+    <loc>https://dendeal.ai.kr/manufacturing.html</loc>
     <lastmod>2026-02-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>http://dendeal.ai.kr/implant.html</loc>
+    <loc>https://dendeal.ai.kr/implant.html</loc>
     <lastmod>2026-02-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>http://dendeal.ai.kr/dentalk.html</loc>
+    <loc>https://dendeal.ai.kr/dentalk.html</loc>
     <lastmod>2026-02-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>http://dendeal.ai.kr/management.html</loc>
+    <loc>https://dendeal.ai.kr/management.html</loc>
     <lastmod>2026-02-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
