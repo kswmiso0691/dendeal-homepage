@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>DENDEAL - 치과기공 디지털 플랫폼</title>
+    <link>http://dendeal.ai.kr</link>
+    <description>덴딜은 치과기공물 배송, 치과재료 구매, 임플란트 공급까지 하나의 플랫폼에서 관리하는 치과 전문 디지털 서비스입니다.</description>
+    <language>ko</language>
+    <lastBuildDate>Sat, 28 Feb 2026 00:00:00 +0900</lastBuildDate>
+    <atom:link href="http://dendeal.ai.kr/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>DENDEAL - 치과기공 디지털 플랫폼</title>
+      <link>http://dendeal.ai.kr/</link>
+      <description>덴딜은 치과기공물 배송, 치과재료 구매, 임플란트 공급까지 하나의 플랫폼에서 관리하는 치과 전문 디지털 서비스입니다.</description>
+      <pubDate>Sat, 28 Feb 2026 00:00:00 +0900</pubDate>
+      <guid>http://dendeal.ai.kr/</guid>
+    </item>
+    <item>
+      <title>회사소개 - DENDEAL</title>
+      <link>http://dendeal.ai.kr/about.html</link>
+      <description>덴탈서비스 주식회사 - 치과기공 디지털 혁신을 이끄는 기업. 벤처기업 인증, 특허 보유, 연구개발전담부서 운영.</description>
+      <pubDate>Sat, 28 Feb 2026 00:00:00 +0900</pubDate>
+      <guid>http://dendeal.ai.kr/about.html</guid>
+    </item>
+    <item>
+      <title>기공물 배송 서비스 - DENDEAL</title>
+      <link>http://dendeal.ai.kr/delivery.html</link>
+      <description>덴딜 기공물 배송 서비스 - 치아의 위생과 보존 상태를 우선하는 새벽배송·퀵배송 전문 플랫폼. 수거부터 납품까지 원스톱 서비스.</description>
+      <pubDate>Sat, 28 Feb 2026 00:00:00 +0900</pubDate>
+      <guid>http://dendeal.ai.kr/delivery.html</guid>
+    </item>
+    <item>
+      <title>덴딜몰 - 치과 재료 스마트 구매 플랫폼</title>
+      <link>http://dendeal.ai.kr/shop.html</link>
+      <description>덴딜몰 - 발주 방식을 바꾸면 재료비가 보입니다. 진료재료, 위생소독, 치과장비 등 20,000+ 상품을 최대 82% 할인 가격으로.</description>
+      <pubDate>Sat, 28 Feb 2026 00:00:00 +0900</pubDate>
+      <guid>http://dendeal.ai.kr/shop.html</guid>
+    </item>
+    <item>
+      <title>제조중개 서비스 - DENDEAL</title>
+      <link>http://dendeal.ai.kr/manufacturing.html</link>
+      <description>덴딜 제조중개 - 기공소간 중개거래 7만건 이상. CNC 커스텀 어버트먼트, 캡코핑, 프레임 등 투명한 가격의 기공물 제조 중개 플랫폼.</description>
+      <pubDate>Sat, 28 Feb 2026 00:00:00 +0900</pubDate>
+      <guid>http://dendeal.ai.kr/manufacturing.html</guid>
+    </item>
+    <item>
+      <title>덴딜 임플란트 - 치과 임플란트 주문 시스템</title>
+      <link>http://dendeal.ai.kr/implant.html</link>
+      <description>덴딜 임플란트 - 원클릭 주문, 즐겨찾기, 주문통계까지. 임플란트 구매의 모든 것을 하나의 시스템으로. 최대 85% 할인.</description>
+      <pubDate>Sat, 28 Feb 2026 00:00:00 +0900</pubDate>
+      <guid>http://dendeal.ai.kr/implant.html</guid>
+    </item>
+    <item>
+      <title>덴톡 메신저 - 치과·기공소 전용 소통 플랫폼</title>
+      <link>http://dendeal.ai.kr/dentalk.html</link>
+      <description>덴톡 메신저 - 치과와 기공소 간 실시간 메신저. 24시간 문의, 파일·사진 첨부, 주문 연동까지. 업무 소통이 한곳에서 해결됩니다.</description>
+      <pubDate>Sat, 28 Feb 2026 00:00:00 +0900</pubDate>
+      <guid>http://dendeal.ai.kr/dentalk.html</guid>
+    </item>
+    <item>
+      <title>경영 관리 - 치과 경영을 한눈에</title>
+      <link>http://dendeal.ai.kr/management.html</link>
+      <description>덴딜 경영관리 - 배송, 제조중개, 쇼핑몰, 임플란트 통계를 한눈에. 엑셀·종이 없이 자동으로 정리되는 스마트 치과 경영 시스템.</description>
+      <pubDate>Sat, 28 Feb 2026 00:00:00 +0900</pubDate>
+      <guid>http://dendeal.ai.kr/management.html</guid>
+    </item>
+  </channel>
+</rss>
