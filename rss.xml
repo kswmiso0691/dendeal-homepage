@@ -3,14 +3,14 @@
   <channel>
     <title>DENDEAL - 치과기공 디지털 플랫폼</title>
     <link>https://dendeal.ai.kr</link>
-    <description>덴딜은 치과기공물 배송, 치과재료 구매, 임플란트 공급까지 하나의 플랫폼에서 관리하는 치과 전문 디지털 서비스입니다.</description>
+    <description>덴딜은 치과기공물 배송, 치과재료 구매, 제조 중개까지 하나의 플랫폼에서 관리하는 치과 전문 디지털 서비스입니다.</description>
     <language>ko</language>
     <lastBuildDate>Sat, 28 Feb 2026 00:00:00 +0900</lastBuildDate>
     <atom:link href="https://dendeal.ai.kr/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>DENDEAL - 치과기공 디지털 플랫폼</title>
       <link>https://dendeal.ai.kr/</link>
-      <description>덴딜은 치과기공물 배송, 치과재료 구매, 임플란트 공급까지 하나의 플랫폼에서 관리하는 치과 전문 디지털 서비스입니다.</description>
+      <description>덴딜은 치과기공물 배송, 치과재료 구매, 제조 중개까지 하나의 플랫폼에서 관리하는 치과 전문 디지털 서비스입니다.</description>
       <pubDate>Sat, 28 Feb 2026 00:00:00 +0900</pubDate>
       <guid>https://dendeal.ai.kr/</guid>
     </item>
@@ -43,25 +43,11 @@
       <guid>https://dendeal.ai.kr/manufacturing.html</guid>
     </item>
     <item>
-      <title>덴딜 임플란트 - 치과 임플란트 주문 시스템</title>
-      <link>https://dendeal.ai.kr/implant.html</link>
-      <description>덴딜 임플란트 - 원클릭 주문, 즐겨찾기, 주문통계까지. 임플란트 구매의 모든 것을 하나의 시스템으로. 최대 85% 할인.</description>
-      <pubDate>Sat, 28 Feb 2026 00:00:00 +0900</pubDate>
-      <guid>https://dendeal.ai.kr/implant.html</guid>
-    </item>
-    <item>
       <title>덴톡 메신저 - 치과·기공소 전용 소통 플랫폼</title>
       <link>https://dendeal.ai.kr/dentalk.html</link>
       <description>덴톡 메신저 - 치과와 기공소 간 실시간 메신저. 24시간 문의, 파일·사진 첨부, 주문 연동까지. 업무 소통이 한곳에서 해결됩니다.</description>
       <pubDate>Sat, 28 Feb 2026 00:00:00 +0900</pubDate>
       <guid>https://dendeal.ai.kr/dentalk.html</guid>
-    </item>
-    <item>
-      <title>경영 관리 - 치과 경영을 한눈에</title>
-      <link>https://dendeal.ai.kr/management.html</link>
-      <description>덴딜 경영관리 - 배송, 제조중개, 쇼핑몰, 임플란트 통계를 한눈에. 엑셀·종이 없이 자동으로 정리되는 스마트 치과 경영 시스템.</description>
-      <pubDate>Sat, 28 Feb 2026 00:00:00 +0900</pubDate>
-      <guid>https://dendeal.ai.kr/management.html</guid>
     </item>
   </channel>
 </rss>
